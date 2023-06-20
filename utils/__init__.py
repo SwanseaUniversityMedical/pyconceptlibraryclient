@@ -1,1 +1,1 @@
-from .http_util import check_response
+from .http_util import check_response, print_response

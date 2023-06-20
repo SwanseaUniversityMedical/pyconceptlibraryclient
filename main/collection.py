@@ -3,7 +3,7 @@ import utils
 import requests
 
 
-class Collection(api.Connection):
+class Collection:
     """
     This class consists of the endpoints related to the Collections.
     """
