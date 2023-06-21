@@ -1,13 +1,22 @@
 import json
 
+
 def check_response(response):
     """
     Helper function to check the response and print accordingly.
     """
-    if response.status_code == 200 or response.status_code == 201:
-        print("Data Found/Created!")
-    else:
-        print("Error Occured! Status code: ", response.status_code)
+    match response.status_code:
+        case 200:
+            print("Data Found!")
+            print_response(response)
+        case 201:
+            print("Data Created!")
+            print_response(response)
+        case 404:
+            print("Not found! Please Check!")
+        case 403:
+            print("Forbidden! This requires authentication!")
+
 
 def print_response(response):
     """
