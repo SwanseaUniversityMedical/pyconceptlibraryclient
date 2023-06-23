@@ -10,6 +10,7 @@ class Phenotype:
 
     def __init__(self, is_public: bool = True) -> None:
         self.conn = api.Connection(is_public)
+        self.urlBuilder = utils.URLBuilder()
 
     def get_phenotypes(
         self,
@@ -29,11 +30,10 @@ class Phenotype:
         """
         This function returns all the phenotypes.
         """
-        path = "/phenotypes"
+        path = api.Path.GET_ALL_PHENOTYPES.value
         payload = {k: v for k, v in locals().items() if v is not None and k != "self"}
-        response = requests.get(self.conn.baseurl + path, params=payload)
+        response = requests.get(self.urlBuilder.get_url(path), params=payload)
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_phenotype_detail(
@@ -55,61 +55,50 @@ class Phenotype:
         """
         This function returns the phenotype detail based on the given phenotype id.
         """
-        path = f"/phenotypes/{id}/detail"
+        path = api.Path.GET_PHENOTYPE_DETAIL.value.format(id=id)
         payload = {k: v for k, v in locals().items() if v is not None and k != "self"}
-        response = requests.get(self.conn.baseurl + path, params=payload)
+        response = requests.get(self.urlBuilder.get_url(path), params=payload)
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_phenotype_versions(self, id: str):
         """
         This function returns all the phenotype versions.
         """
-        path = f"/phenotypes/{id}/get-versions"
-        response = requests.get(self.conn.baseurl + path)
+        path = api.Path.GET_PHENOTYPE_VERSIONS.value.format(id=id)
+        response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_phenotype_version_detail(self, id: str, version_id: int):
         """
         This function returns the phenotype version detail based on the given phenotype id and the version id.
         """
-        path = f"/phenotypes/{id}/version/{version_id}/detail"
-        response = requests.get(self.conn.baseurl + path)
+        path = api.Path.GET_PHENOTYPE_VERSION_DETAIL.value.format(
+            id=id, version_id=version_id
+        )
+        response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_phenotype_code_list(self, id: str):
         """
         This function returns the codes list based on the given phenotype id.
         """
-        path = f"/phenotypes/{id}/export/codes"
-        response = requests.get(self.conn.baseurl + path)
+        path = api.Path.GET_PHENOTYPE_CODELIST.value.format(id=id)
+        response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
-        utils.print_response(response)
-        return response
-
-    def get_phenotype_code_list(self, id: str):
-        """
-        This function returns the codes list based on the given phenotype id.
-        """
-        path = f"/phenotypes/{id}/export/codes"
-        response = requests.get(self.conn.baseurl + path)
-        utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_phenotype_code_list_by_version(self, id: str, version_id: int):
         """
         This function returns the codes list based on the given phenotype id.
         """
-        path = f"/phenotypes/{id}/version/{version_id}/export/codes/"
-        response = requests.get(self.conn.baseurl + path)
+        path = api.Path.GET_PHENOTYPE_VERSION_CODELIST.value.format(
+            id=id, version_id=version_id
+        )
+        response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
 

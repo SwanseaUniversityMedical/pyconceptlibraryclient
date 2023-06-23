@@ -10,6 +10,7 @@ class Concepts:
 
     def __init__(self, is_public: bool = True) -> None:
         self.conn = api.Connection(is_public)
+        self.urlBuilder = utils.URLBuilder()
 
     def get_all_concepts(
         self,
@@ -28,61 +29,59 @@ class Concepts:
         """
         This function returns all the concepts.
         """
-        path = "/concepts"
+        path = api.Path.GET_ALL_CONCEPTS.value
         payload = {k: v for k, v in locals().items() if v is not None and k != "self"}
-        response = requests.get(self.conn.baseurl + path, params=payload)
+        response = requests.get(self.urlBuilder.get_url(path), params=payload)
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_concept_detail(self, concept_id: int):
         """
         This function returns the concept detail based on the given concept id.
         """
-        path = f"/concepts/C{concept_id}/detail"
-        response = requests.get(self.conn.baseurl + path)
+        path = api.Path.GET_CONCEPT_DETAIL.value.format(concept_id=concept_id)
+        response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_concept_export_codes(self, concept_id: int):
         """
         This function returns the concept export code list based on the given concept id.
         """
-        path = f"/concepts/C{concept_id}/export/codes"
-        response = requests.get(self.conn.baseurl + path)
+        path = api.Path.GET_CONCEPT_CODELIST.value.format(concept_id=concept_id)
+        response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_concept_versions(self, concept_id: int):
         """
         This function returns the concept versions based on the given concept id.
         """
-        path = f"/concepts/C{concept_id}/get-versions"
-        response = requests.get(self.conn.baseurl + path)
+        path = api.Path.GET_CONCEPT_VERSIONS.value.format(concept_id=concept_id)
+        response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_concept_version_detail(self, concept_id: int, version_id: int):
         """
         This function returns the concept version detail based on the given concept id and version id.
         """
-        path = f"/concepts/C{concept_id}/version/{version_id}/detail"
-        response = requests.get(self.conn.baseurl + path)
+        path = api.Path.GET_CONCEPT_VERSION_DETAIL.value.format(
+            concept_id=concept_id, version_id=version_id
+        )
+        response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
     def get_concept_version_export_codes(self, concept_id: int, version_id: int):
         """
         This function returns the concept version export codes based on the given concept id and version id.
         """
-        path = f"/concepts/C{concept_id}/version/{version_id}/export/codes"
-        response = requests.get(self.conn.baseurl + path)
+        path = api.Path.GET_CONCEPT_VERSION_CODELIST.value.format(
+            concept_id=concept_id, version_id=version_id
+        )
+        response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
-        utils.print_response(response)
         return response
 
 
