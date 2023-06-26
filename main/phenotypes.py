@@ -1,6 +1,7 @@
 import api
 import utils
 import requests
+import yaml
 
 
 class Phenotype:
@@ -101,6 +102,63 @@ class Phenotype:
         utils.check_response(response)
         return response
 
+    def save_phenotype_definition(self, id: str, dir: str = None, version_id=None):
+        phenotype_data = None
+        if version_id is None:
+            phenotype_data = self.get_phenotype_detail(id)
+        else:
+            phenotype_data = self.get_phenotype_version_detail(id, version_id).json()[0]
+
+        result = {}
+        for field_name in phenotype_data:
+            if field_name not in utils.constants.API_IGNORE_TEMPLATE_FIELDS:
+                field_value = phenotype_data[field_name]
+                if utils.should_write_field(field_value):
+                    if isinstance(field_value, dict):
+                        if "id" in field_value and "version_id" in field_value:
+                            result[field_name] = {
+                                "id": field_value["id"],
+                                "version_id": field_value["version_id"],
+                            }
+                        else:
+                            result[field_name] = field_value
+                    else:
+                        if field_name == "concept_information":
+                            result_concepts = []
+                            for concept in range(len(field_value)):
+                                concept_data = {
+                                    field_value[concept]["concept_name"]: {
+                                        "type": "existing_concept",
+                                        "concept_id": field_value[concept][
+                                            "concept_id"
+                                        ],
+                                        "concept_version_id": field_value[concept][
+                                            "concept_version_id"
+                                        ],
+                                    }
+                                }
+                                result_concepts.append(concept_data)
+                            result[field_name] = result_concepts
+                        elif isinstance(field_value, str | int):
+                            result[field_name] = field_value
+                        elif isinstance(field_value, list):
+                            if len(field_value) > 1:
+                                result_values = []
+                                for item in range(len(field_value)):
+                                    result_values.append(field_value[item]["value"])
+                                result[field_name] = result_values
+                            elif field_name != "publications":
+                                result[field_name] = field_value[0]["value"]
+                            else:
+                                result[field_name] = field_value[0]
+
+        yaml.dump(
+            result,
+            open(f"./assets/gen/{id}-definition-file.yaml", "w"),
+            default_flow_style=False,
+            sort_keys=False,
+        )
+
 
 def main():
     phenotype = Phenotype()
@@ -111,6 +169,9 @@ def main():
     phenotype.get_phenotype_version_detail("PH1", 3)
     phenotype.get_phenotype_code_list("PH1")
     phenotype.get_phenotype_code_list_by_version("PH1", 2)
+    phenotype.save_phenotype_definition("PH1", "./assets/gen", 2)
+    phenotype.save_phenotype_definition("PH2", "./assets/gen", 4)
+    phenotype.save_phenotype_definition("PH3", "./assets/gen", 6)
 
 
 if __name__ == "__main__":

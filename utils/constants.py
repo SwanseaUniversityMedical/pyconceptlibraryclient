@@ -1,0 +1,1 @@
+API_IGNORE_TEMPLATE_FIELDS = ["versions", "status", "is_deleted", "owner_access"]
