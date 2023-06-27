@@ -16,7 +16,8 @@ def check_response(response):
             print("Not found! Please Check!")
         case 403:
             print("Forbidden! This requires authentication!")
-
+        case 500:
+            print("Server Error!")
 
 def print_response(response):
     """
