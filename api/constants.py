@@ -30,3 +30,4 @@ class Path(Enum):
     GET_PHENOTYPE_VERSION_DETAIL = "phenotypes/{id}/version/{version_id}/detail"
     GET_PHENOTYPE_CODELIST = "phenotypes/{id}/export/codes"
     GET_PHENOTYPE_VERSION_CODELIST = "phenotypes/{id}/version/{version_id}/export/codes"
+    CREATE_PHENOTYPE = "phenotypes/create/"

@@ -1,7 +1,7 @@
 import api
 import utils
 import requests
-import yaml
+import yaml, json
 
 
 class Phenotype:
@@ -159,19 +159,75 @@ class Phenotype:
             sort_keys=False,
         )
 
+    def create_phenotype(self, data):
+        """
+        This function creates a phenotype defined in the form of json which is passed as an argument
+        """
+        path = api.Path.CREATE_PHENOTYPE.value
+        response = requests.post(
+            self.urlBuilder.get_url(path),
+            auth=self.conn.auth,
+            data=json.dumps(data),
+        )
+        utils.check_response(response)
+        return response
+
+    def upload_phenotype(self, dir: str = "./assets/definition_file.yaml"):
+        """
+        This function uploads a phenotype defined in the given .yaml file. It internally calls
+        `create_phenotype` function.
+        """
+        data = utils.yaml_to_json(dir)
+        if data:
+            modified_data = utils.format_phenotype(data, is_update=True)
+            new_phenotype = json.loads(utils.insert_empty_fields(modified_data))
+            new_phenotype = {"data": modified_data}
+            if new_phenotype["data"]["template"]:
+                template_data = utils.format_template(new_phenotype)
+                del new_phenotype["data"]["template"]
+                new_phenotype["template"] = template_data
+            else:
+                raise ValueError("Template id and version are missing")
+
+            if new_phenotype["data"]["concept_information"]:
+                new_phenotype["data"]["concept_information"] = utils.format_concept(
+                    new_phenotype["data"]["concept_information"]
+                )
+        else:
+            raise ValueError(
+                "File is invalid, please check the file location and filetype (supports .yaml files only)"
+            )
+
+        response = self.create_phenotype(new_phenotype)
+        phenotype_response_json = response.json()
+        result = {"data": json.loads(data), "response": phenotype_response_json}
+
+        yaml.dump(
+            result,
+            open(
+                f"./assets/gen/upload/{phenotype_response_json['entity']['id']}-definition-output-file.yaml",
+                "w",
+            ),
+            default_flow_style=False,
+            sort_keys=False,
+        )
+
+        return result
+
 
 def main():
-    phenotype = Phenotype()
-    phenotype.get_phenotypes()
-    phenotype.get_phenotypes(search="Alcohol")
-    phenotype.get_phenotype_detail("PH1", search="Alcohol")
-    phenotype.get_phenotype_versions("PH1")
-    phenotype.get_phenotype_version_detail("PH1", 3)
-    phenotype.get_phenotype_code_list("PH1")
-    phenotype.get_phenotype_code_list_by_version("PH1", 2)
-    phenotype.save_phenotype_definition("PH1", "./assets/gen", 2)
-    phenotype.save_phenotype_definition("PH2", "./assets/gen", 4)
-    phenotype.save_phenotype_definition("PH3", "./assets/gen", 6)
+    phenotype = Phenotype(is_public=False)
+    # phenotype.get_phenotypes()
+    # phenotype.get_phenotypes(search="Alcohol")
+    # phenotype.get_phenotype_detail("PH1", search="Alcohol")
+    # phenotype.get_phenotype_versions("PH1")
+    # phenotype.get_phenotype_version_detail("PH1", 3)
+    # phenotype.get_phenotype_code_list("PH1")
+    # phenotype.get_phenotype_code_list_by_version("PH1", 2)
+    # phenotype.save_phenotype_definition("PH1", "./assets/gen", 2)
+    # phenotype.save_phenotype_definition("PH2", "./assets/gen", 4)
+    # phenotype.save_phenotype_definition("PH3", "./assets/gen", 6)
+    phenotype.upload_phenotype()
 
 
 if __name__ == "__main__":
