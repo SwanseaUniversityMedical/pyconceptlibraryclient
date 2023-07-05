@@ -12,8 +12,12 @@ class Concepts:
         self.conn = api.Connection(is_public)
         self.urlBuilder = utils.URLBuilder()
 
-    def get_all_concepts(
-        self,
+    def get_all_concepts(self, **kwargs):
+        """
+        This function returns all the concepts.
+
+        Optional Parameters:
+
         search: str = None,
         collection_ids: list = None,
         tag_ids: list = None,
@@ -25,12 +29,9 @@ class Concepts:
         owner_username: str = None,
         do_not_show_versions: int = None,
         must_have_published_versions: int = None,
-    ):
-        """
-        This function returns all the concepts.
         """
         path = api.Path.GET_ALL_CONCEPTS.value
-        payload = {k: v for k, v in locals().items() if v is not None and k != "self"}
+        payload = {k: v for k, v in kwargs.items() if v is not None}
         response = requests.get(self.urlBuilder.get_url(path), params=payload)
         utils.check_response(response)
         return response

@@ -13,8 +13,12 @@ class Phenotype:
         self.conn = api.Connection(is_public)
         self.urlBuilder = utils.URLBuilder()
 
-    def get_phenotypes(
-        self,
+    def get_phenotypes(self, **kwargs):
+        """
+        This function returns all the phenotypes.
+
+        Optional Parameters:
+
         search: str = None,
         collection_ids: list = None,
         tag_ids: list = None,
@@ -26,13 +30,10 @@ class Phenotype:
         author: str = None,
         owner_username: str = None,
         do_not_show_versions: int = None,
-        must_have_published_versions: int = None,
-    ):
-        """
-        This function returns all the phenotypes.
+        must_have_published_versions: int = None
         """
         path = api.Path.GET_ALL_PHENOTYPES.value
-        payload = {k: v for k, v in locals().items() if v is not None and k != "self"}
+        payload = {k: v for k, v in kwargs.items() if v is not None}
         response = requests.get(self.urlBuilder.get_url(path), params=payload)
         utils.check_response(response)
         return response
@@ -271,7 +272,7 @@ class Phenotype:
 def main():
     phenotype = Phenotype(is_public=False)
     # phenotype.get_phenotypes()
-    # phenotype.get_phenotypes(search="Alcohol")
+    phenotype.get_phenotypes(search="Alcohol")
     # phenotype.get_phenotype_detail("PH1", search="Alcohol")
     # phenotype.get_phenotype_versions("PH1")
     # phenotype.get_phenotype_version_detail("PH1", 3)
@@ -280,7 +281,7 @@ def main():
     # phenotype.save_phenotype_definition("PH1", "./assets/gen", 2)
     # phenotype.save_phenotype_definition("PH2", "./assets/gen", 4)
     # phenotype.save_phenotype_definition("PH3", "./assets/gen", 6)
-    phenotype.upload_phenotype(is_update=False)
+    # phenotype.upload_phenotype(is_update=False)
 
 
 if __name__ == "__main__":
