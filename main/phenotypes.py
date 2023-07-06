@@ -13,51 +13,53 @@ class Phenotype:
         self.conn = api.Connection(is_public)
         self.urlBuilder = utils.URLBuilder()
 
-    def get_phenotypes(
-        self,
-        search: str = None,
-        collection_ids: list = None,
-        tag_ids: list = None,
-        selected_phenotype_types: list = None,
-        show_only_my_phenotypes: int = None,
-        show_only_deleted_phenotypes: int = None,
-        show_only_validated_phenotypes: int = None,
-        brand: str = None,
-        author: str = None,
-        owner_username: str = None,
-        do_not_show_versions: int = None,
-        must_have_published_versions: int = None,
-    ):
+    def get_phenotypes(self, **kwargs):
         """
         This function returns all the phenotypes.
+
+        Optional Parameters:
+
+        search: str,
+        collection_ids: list,
+        tag_ids: list,
+        selected_phenotype_types: list,
+        show_only_my_phenotypes: int,
+        show_only_deleted_phenotypes: int,
+        show_only_validated_phenotypes: int,
+        brand: str,
+        author: str,
+        owner_username: str,
+        do_not_show_versions: int,
+        must_have_published_versions: int,
         """
         path = api.Path.GET_ALL_PHENOTYPES.value
-        payload = {k: v for k, v in locals().items() if v is not None and k != "self"}
+        payload = {k: v for k, v in kwargs.items() if v is not None}
         response = requests.get(self.urlBuilder.get_url(path), params=payload)
         utils.check_response(response)
         return response
 
-    def get_phenotype_detail(
-        self,
-        id: str,
-        search: str = None,
-        collection_ids: list = None,
-        tag_ids: list = None,
-        selected_phenotype_types: list = None,
-        show_only_my_phenotypes: int = None,
-        show_only_deleted_phenotypes: int = None,
-        show_only_validated_phenotypes: int = None,
-        brand: str = None,
-        author: str = None,
-        owner_username: str = None,
-        do_not_show_versions: int = None,
-        must_have_published_versions: int = None,
-    ):
+    def get_phenotype_detail(self, **kwargs):
         """
         This function returns the phenotype detail based on the given phenotype id.
+
+        Optional Parameters:
+
+        id: str,
+        search: str,
+        collection_ids: list,
+        tag_ids: list,
+        selected_phenotype_types: list,
+        show_only_my_phenotypes: int,
+        show_only_deleted_phenotypes: int,
+        show_only_validated_phenotypes: int,
+        brand: str,
+        author: str,
+        owner_username: str,
+        do_not_show_versions: int,
+        must_have_published_versions: int
         """
         path = api.Path.GET_PHENOTYPE_DETAIL.value.format(id=id)
-        payload = {k: v for k, v in locals().items() if v is not None and k != "self"}
+        payload = {k: v for k, v in kwargs.items() if v is not None}
         response = requests.get(self.urlBuilder.get_url(path), params=payload)
         utils.check_response(response)
         return response
