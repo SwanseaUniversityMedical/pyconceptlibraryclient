@@ -25,14 +25,13 @@ def format_template(my_json: json):
     }
 
 
-def format_phenotype(data, is_update: bool = False):
+def format_phenotype(data, is_update: bool):
     my_json = json.loads(data)
-    if is_update:
-        my_json["entity"] = {"id": ""}
-        my_json["entity"]["id"] = my_json["phenotype_id"]
-        for field in API_IGNORE_WRITE_FIELDS:
-            if is_update:
-                del my_json[field]
+    for field in API_IGNORE_WRITE_FIELDS:
+        if is_update:
+            del my_json["data"][field]
+        else:
+            del my_json[field]
     return my_json
 
 

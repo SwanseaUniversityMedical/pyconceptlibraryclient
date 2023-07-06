@@ -172,47 +172,100 @@ class Phenotype:
         utils.check_response(response)
         return response
 
-    def upload_phenotype(self, dir: str = "./assets/definition_file.yaml"):
+    def update_phenotype(self, data):
         """
-        This function uploads a phenotype defined in the given .yaml file. It internally calls
-        `create_phenotype` function.
+        This function creates a phenotype defined in the form of json which is passed as an argument
+        """
+        path = api.Path.UPDATE_PHENOTYPE.value
+        response = requests.put(
+            self.urlBuilder.get_url(path),
+            auth=self.conn.auth,
+            data=json.dumps(data),
+        )
+        utils.check_response(response)
+        return response
+
+    def upload_phenotype(
+        self, is_update: bool, dir: str = "./assets/definition_file_create.yaml"
+    ):
+        """
+        This function creates/updates a phenotype defined in the form of json which is passed as an argument depending upon
+        the parameter 'is_update' that is passed. If it is True, then we hit the update_phenotype endpoint otherwise, we hit
+        the create_endpoint endpoint.
         """
         data = utils.yaml_to_json(dir)
         if data:
-            modified_data = utils.format_phenotype(data, is_update=True)
-            new_phenotype = json.loads(utils.insert_empty_fields(modified_data))
-            new_phenotype = {"data": modified_data}
-            if new_phenotype["data"]["template"]:
-                template_data = utils.format_template(new_phenotype)
-                del new_phenotype["data"]["template"]
-                new_phenotype["template"] = template_data
-            else:
-                raise ValueError("Template id and version are missing")
-
-            if new_phenotype["data"]["concept_information"]:
-                new_phenotype["data"]["concept_information"] = utils.format_concept(
-                    new_phenotype["data"]["concept_information"]
+            modified_data = utils.format_phenotype(data, is_update)
+            if is_update:
+                to_be_updated_phenotype = json.loads(
+                    utils.insert_empty_fields(modified_data)
                 )
+                to_be_updated_phenotype = modified_data
+                if to_be_updated_phenotype["data"]["template"]:
+                    template_data = utils.format_template(to_be_updated_phenotype)
+                    del to_be_updated_phenotype["data"]["template"]
+                    to_be_updated_phenotype["template"] = template_data
+                else:
+                    raise ValueError("Template id and version are missing")
+                if to_be_updated_phenotype["data"]["concept_information"]:
+                    to_be_updated_phenotype["data"][
+                        "concept_information"
+                    ] = utils.format_concept(
+                        to_be_updated_phenotype["data"]["concept_information"]
+                    )
+                response = self.update_phenotype(to_be_updated_phenotype)
+                phenotype_response_json = response.json()
+                result = {
+                    "data": json.loads(data)["data"],
+                    "entity": [{"id": phenotype_response_json["entity"]["id"]}],
+                }
+                yaml.dump(
+                    result,
+                    open(
+                        utils.constants.PATH_FOR_STORING_FILE_AFTER_UPDATE_PHENOTYPE
+                        + f"{phenotype_response_json['entity']['id']}-definition-output-file.yaml",
+                        "w",
+                    ),
+                    default_flow_style=False,
+                    sort_keys=False,
+                )
+                yaml.dump(
+                    result,
+                    open("./assets/definition_file_update.yaml", "w"),
+                    default_flow_style=False,
+                    sort_keys=False,
+                )
+            else:
+                new_phenotype = json.loads(utils.insert_empty_fields(modified_data))
+                new_phenotype = {"data": modified_data}
+                if new_phenotype["data"]["template"]:
+                    template_data = utils.format_template(new_phenotype)
+                    del new_phenotype["data"]["template"]
+                    new_phenotype["template"] = template_data
+                else:
+                    raise ValueError("Template id and version are missing")
+                if new_phenotype["data"]["concept_information"]:
+                    new_phenotype["data"]["concept_information"] = utils.format_concept(
+                        new_phenotype["data"]["concept_information"]
+                    )
+                response = self.create_phenotype(new_phenotype)
+                phenotype_response_json = response.json()
+                result = {"data": json.loads(data), "response": phenotype_response_json}
+                yaml.dump(
+                    result,
+                    open(
+                        utils.constants.PATH_FOR_STORING_FILE_AFTER_CREATE_PHENOTYPE
+                        + f"{phenotype_response_json['entity']['id']}-definition-output-file.yaml",
+                        "w",
+                    ),
+                    default_flow_style=False,
+                    sort_keys=False,
+                )
+            return result
         else:
             raise ValueError(
                 "File is invalid, please check the file location and filetype (supports .yaml files only)"
             )
-
-        response = self.create_phenotype(new_phenotype)
-        phenotype_response_json = response.json()
-        result = {"data": json.loads(data), "response": phenotype_response_json}
-
-        yaml.dump(
-            result,
-            open(
-                f"./assets/gen/upload/{phenotype_response_json['entity']['id']}-definition-output-file.yaml",
-                "w",
-            ),
-            default_flow_style=False,
-            sort_keys=False,
-        )
-
-        return result
 
 
 def main():
@@ -227,7 +280,7 @@ def main():
     # phenotype.save_phenotype_definition("PH1", "./assets/gen", 2)
     # phenotype.save_phenotype_definition("PH2", "./assets/gen", 4)
     # phenotype.save_phenotype_definition("PH3", "./assets/gen", 6)
-    phenotype.upload_phenotype()
+    phenotype.upload_phenotype(is_update=False)
 
 
 if __name__ == "__main__":
