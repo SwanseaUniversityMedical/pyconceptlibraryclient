@@ -161,3 +161,6 @@ cython_debug/
 
 # Project Specific
 /assets/gen/
+
+# macOS system files
+.DS_Stores
