@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   format:
@@ -29,3 +26,13 @@ jobs:
 
       - name: Run Black
         run: black .
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "${GIT_AUTHOR_NAME}"
+          git config --global user.email "${GIT_AUTHOR_EMAIL}"
+
+      - name: Amend Previous Commit With Same Commit Message
+        run: |
+          git commit --amend --no-edit
+          git push --force-with-lease
