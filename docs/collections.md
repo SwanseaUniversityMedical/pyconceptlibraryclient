@@ -1,0 +1,4 @@
+# Collections
+
+::: main.collection.Collection
+        

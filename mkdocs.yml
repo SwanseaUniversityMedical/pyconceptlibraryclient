@@ -1,0 +1,75 @@
+site_name: pyconceptlibraryclient
+site_url: https://github.com/SwanseaUniversityMedical/pyconceptlibraryclient
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+  language: en
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline 
+        name: Switch to dark mode
+      primary: teal
+      accent: purple 
+    - scheme: slate 
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode    
+      primary: teal
+      accent: lime
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_source: false
+            heading_level: 2
+            docstring_style: google
+            docstring_section_style: table
+            show_docstring_description: true
+            show_docstring_examples: true
+            show_root_toc_entry: false
+            show_root_full_path: false
+            show_root_members_full_path: false
+            show_category_heading: true
+            members_order: alphabetical
+            show_signature: true
+
+nav:
+  - "Home": index.md
+  - "Collections": collections.md
+  - "Tags": tags.md
+  - "Phenotypes": phenotypes.md
+  - "Concepts": concepts.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.arithmatex:
+      generic: true
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+copyright: |
+  &copy; 2023 <a href="https://github.com/SwanseaUniversityMedical"  target="_blank" rel="noopener">Swansea University Medical School</a>
