@@ -17,20 +17,25 @@ class Phenotype:
         """
         This function returns all the phenotypes.
 
-        Optional Parameters:
-
-        search: str,
-        collection_ids: list,
-        tag_ids: list,
-        selected_phenotype_types: list,
-        show_only_my_phenotypes: int,
-        show_only_deleted_phenotypes: int,
-        show_only_validated_phenotypes: int,
-        brand: str,
-        author: str,
-        owner_username: str,
-        do_not_show_versions: int,
-        must_have_published_versions: int,
+        Keyword Args:
+            search (string): Optional,
+            collection_ids (list): Optional,
+            tag_ids (list): Optional,
+            selected_phenotype_types (list): Optional,
+            show_only_my_phenotypes (int): Optional,
+            show_only_deleted_phenotypes (int): Optional,
+            show_only_validated_phenotypes (int): Optional,
+            brand (string): Optional,
+            author (string): Optional,
+            owner_username (string): Optional,
+            do_not_show_versions (int): Optional,
+            must_have_published_versions (int): Optional
+        Returns:
+            Response (list -> json objects): A list representing all the phenotypes present in the database.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.concepts.get_phenotypes()
         """
         path = api.Path.GET_ALL_PHENOTYPES.value
         payload = {k: v for k, v in kwargs.items() if v is not None}
@@ -38,25 +43,31 @@ class Phenotype:
         utils.check_response(response)
         return response
 
-    def get_phenotype_detail(self, **kwargs):
+    def get_phenotype_detail(self, id: str, **kwargs):
         """
         This function returns the phenotype detail based on the given phenotype id.
 
-        Optional Parameters:
-
-        id: str,
-        search: str,
-        collection_ids: list,
-        tag_ids: list,
-        selected_phenotype_types: list,
-        show_only_my_phenotypes: int,
-        show_only_deleted_phenotypes: int,
-        show_only_validated_phenotypes: int,
-        brand: str,
-        author: str,
-        owner_username: str,
-        do_not_show_versions: int,
-        must_have_published_versions: int
+        Parameters:
+            id (string): Phenotype Id to retrieve a particular phenotype from the database.
+        Keyword Args:
+            search (string): Optional,
+            collection_ids (list): Optional,
+            tag_ids (list): Optional,
+            selected_phenotype_types (list): Optional,
+            show_only_my_phenotypes (int): Optional,
+            show_only_deleted_phenotypes (int): Optional,
+            show_only_validated_phenotypes (int): Optional,
+            brand (string): Optional,
+            author (string): Optional,
+            owner_username (string): Optional,
+            do_not_show_versions (int): Optional,
+            must_have_published_versions (int): Optional
+        Returns:
+            Response (list -> json objects): A list representing all the phenotypes present in the database.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.concepts.get_phenotype_detail(id=1)
         """
         path = api.Path.GET_PHENOTYPE_DETAIL.value.format(id=id)
         payload = {k: v for k, v in kwargs.items() if v is not None}
@@ -67,6 +78,15 @@ class Phenotype:
     def get_phenotype_versions(self, id: str):
         """
         This function returns all the phenotype versions.
+
+        Parameters:
+            id (string): Phenotype Id to retrieve a particular phenotype from the database.
+        Returns:
+            Response (json object): A json object representing a single phenotype present in the database.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.concepts.get_phenotype_versions(id=1)
         """
         path = api.Path.GET_PHENOTYPE_VERSIONS.value.format(id=id)
         response = requests.get(self.urlBuilder.get_url(path))
@@ -76,6 +96,16 @@ class Phenotype:
     def get_phenotype_version_detail(self, id: str, version_id: int):
         """
         This function returns the phenotype version detail based on the given phenotype id and the version id.
+
+        Parameters:
+            id (string): Phenotype Id to retrieve a particular phenotype from the database.
+            version_id (int): Version Id to retrieve a particular phenotype from the database.
+        Returns:
+            Response (json object): A json object representing a single phenotype_version_detail present in the database.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.concepts.get_phenotype_version_detail(id=1, version_id=1)
         """
         path = api.Path.GET_PHENOTYPE_VERSION_DETAIL.value.format(
             id=id, version_id=version_id
@@ -87,6 +117,15 @@ class Phenotype:
     def get_phenotype_code_list(self, id: str):
         """
         This function returns the codes list based on the given phenotype id.
+
+        Parameters:
+            id (string): Phenotype Id to retrieve a particular phenotype from the database.
+        Returns:
+            Response (list -> json objects): A list representing a phenotype codes present in the database.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.concepts.get_phenotype_code_list(id=1)
         """
         path = api.Path.GET_PHENOTYPE_CODELIST.value.format(id=id)
         response = requests.get(self.urlBuilder.get_url(path))
@@ -96,6 +135,16 @@ class Phenotype:
     def get_phenotype_code_list_by_version(self, id: str, version_id: int):
         """
         This function returns the codes list based on the given phenotype id.
+
+        Parameters:
+            id (string): Phenotype Id to retrieve a particular phenotype from the database.
+            version_id (int): Version Id to retrieve a particular phenotype from the database.
+        Returns:
+            Response (list -> json objects): A list representing a phenotype codes list by version, present in the database.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.concepts.get_phenotype_code_list(id=1)
         """
         path = api.Path.GET_PHENOTYPE_VERSION_CODELIST.value.format(
             id=id, version_id=version_id
@@ -105,6 +154,9 @@ class Phenotype:
         return response
 
     def save_phenotype_definition(self, id: str, dir: str = None, version_id=None):
+        """
+        Description TODO
+        """
         phenotype_data = None
         if version_id is None:
             phenotype_data = self.get_phenotype_detail(id)
@@ -192,8 +244,12 @@ class Phenotype:
     ):
         """
         This function creates/updates a phenotype defined in the form of json which is passed as an argument depending upon
-        the parameter 'is_update' that is passed. If it is True, then we hit the update_phenotype endpoint otherwise, we hit
-        the create_endpoint endpoint.
+        the parameter 'is_update' that is passed.
+
+        Parameters:
+            is_update (bool): If it is True, then we hit the update_phenotype endpoint otherwise, we hit the create_endpoint endpoint.
+        Returns:
+            Response (json object): Consisting of `data` and `phenotype_response`
         """
         data = utils.yaml_to_json(dir)
         if data:

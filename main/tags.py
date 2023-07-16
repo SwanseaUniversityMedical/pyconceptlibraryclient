@@ -15,6 +15,13 @@ class Tags:
     def get_all_tags(self):
         """
         This function returns all the tags.
+
+        Returns:
+            Response (list -> json objects): A list representing all the tags present in the database.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.tags.get_all_tags()
         """
         path = api.Path.GET_ALL_TAGS.value
         response = requests.get(self.urlBuilder.get_url(path))
@@ -24,6 +31,15 @@ class Tags:
     def get_tag_info(self, id: int):
         """
         This function returns the tag info based on the given tag id.
+
+        Parameters:
+            id (int): Tag Id to retrieve a particular `tag` object
+        Returns:
+            Response (json object): A json object representing single tag present in the database based on passed `id`.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.tags.get_tag_by_id(1)
         """
         path = api.Path.GET_TAG_BY_ID.value.format(id=id)
         response = requests.get(self.urlBuilder.get_url(path))
