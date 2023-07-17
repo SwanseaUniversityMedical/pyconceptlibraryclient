@@ -32,7 +32,7 @@ class Phenotype:
             must_have_published_versions (int): Optional
         Returns:
             Response (list -> json objects): A list representing all the phenotypes present in the database.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_phenotypes()
@@ -64,7 +64,7 @@ class Phenotype:
             must_have_published_versions (int): Optional
         Returns:
             Response (list -> json objects): A list representing all the phenotypes present in the database.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_phenotype_detail(id=1)
@@ -83,7 +83,7 @@ class Phenotype:
             id (string): Phenotype Id to retrieve a particular phenotype from the database.
         Returns:
             Response (json object): A json object representing a single phenotype present in the database.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_phenotype_versions(id=1)
@@ -102,7 +102,7 @@ class Phenotype:
             version_id (int): Version Id to retrieve a particular phenotype from the database.
         Returns:
             Response (json object): A json object representing a single phenotype_version_detail present in the database.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_phenotype_version_detail(id=1, version_id=1)
@@ -122,7 +122,7 @@ class Phenotype:
             id (string): Phenotype Id to retrieve a particular phenotype from the database.
         Returns:
             Response (list -> json objects): A list representing a phenotype codes present in the database.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_phenotype_code_list(id=1)
@@ -141,7 +141,7 @@ class Phenotype:
             version_id (int): Version Id to retrieve a particular phenotype from the database.
         Returns:
             Response (list -> json objects): A list representing a phenotype codes list by version, present in the database.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_phenotype_code_list(id=1)

@@ -18,7 +18,7 @@ class Collection:
 
         Returns:
             Response (list -> json objects): A list representing all the collection present in the database.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.collections.get_all_collections()
@@ -36,7 +36,7 @@ class Collection:
             id (int): Collection Id to retrieve a particular `collection` object
         Returns:
             Response (json object): A json object representing single collection present in the database based on passed `id`.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.collections.get_collection_by_id(1)

@@ -18,7 +18,7 @@ class Tags:
 
         Returns:
             Response (list -> json objects): A list representing all the tags present in the database.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.tags.get_all_tags()
@@ -36,7 +36,7 @@ class Tags:
             id (int): Tag Id to retrieve a particular `tag` object
         Returns:
             Response (json object): A json object representing single tag present in the database based on passed `id`.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.tags.get_tag_by_id(1)

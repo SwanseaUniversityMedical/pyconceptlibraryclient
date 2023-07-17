@@ -30,7 +30,7 @@ class Concepts:
             must_have_published_versions (int): Optional
         Returns:
             Response (list -> json objects): A list representing all the concepts present in the database.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_all_concepts()
@@ -49,7 +49,7 @@ class Concepts:
             concept_id (int): Concept Id to retrieve a particular `concept` object
         Returns:
             Response (json object): A json object representing a single concept present in the database based on passed `id`.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_concept_detail(concept_id=1)
@@ -67,7 +67,7 @@ class Concepts:
             concept_id (int): Concept Id to retrieve a particular `concept_export_code` object
         Returns:
             Response (json object): A json object representing a single concept export code present in the database based on passed `id`.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_concept_export_codes(concept_id=1)
@@ -85,7 +85,7 @@ class Concepts:
             concept_id(int): Concept Id to retrieve a particular `concept_version` object
         Returns:
             Response (json object): A json object representing a single concept version present in the database based on passed `id`.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_concept_versions(concept_id=1)
@@ -104,7 +104,7 @@ class Concepts:
             version_id(int): Version Id to retrieve a particular `concept_version_detail` object
         Returns:
             Response (json object): A json object representing a single concept version detail present in the database based on passed `id`.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_concept_version_detail(concept_id=1, version_id=1)
@@ -125,7 +125,7 @@ class Concepts:
             version_id(int): Version Id to retrieve a particular `concept_version_export_code` object
         Returns:
             Response (json object): A json object representing a single concept_version_export_code present in the database based on passed `id`.
-        Example:
+        Examples:
             >>> import pyconceptlibraryclient
             >>> client = Client(is_public=False)
             >>> client.concepts.get_concept_version_detail(concept_id=1, version_id=1)
