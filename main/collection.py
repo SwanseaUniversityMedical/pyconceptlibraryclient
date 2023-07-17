@@ -15,6 +15,13 @@ class Collection:
     def get_all_collections(self):
         """
         This function returns all the collections.
+
+        Returns:
+            Response (list -> json objects): A list representing all the collection present in the database.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.collections.get_all_collections()
         """
         path = api.Path.GET_ALL_COLLECTIONS.value
         response = requests.get(self.urlBuilder.get_url(path))
@@ -24,6 +31,15 @@ class Collection:
     def get_collection_by_id(self, id):
         """
         This function returns the collection info based on the given collection id.
+
+        Parameters:
+            id (int): Collection Id to retrieve a particular `collection` object
+        Returns:
+            Response (json object): A json object representing single collection present in the database based on passed `id`.
+        Example:
+            >>> import pyconceptlibraryclient
+            >>> client = Client(is_public=False)
+            >>> client.collections.get_collection_by_id(1)
         """
         path = api.Path.GET_COLLECTION_BY_ID.value.format(id=id)
         response = requests.get(self.urlBuilder.get_url(path))
