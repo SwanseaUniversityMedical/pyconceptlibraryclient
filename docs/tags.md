@@ -1,3 +1,3 @@
 # Tags
 
-::: main.tags.Tags
+::: pyconceptlibraryclient.tags.Tags

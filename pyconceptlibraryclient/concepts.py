@@ -32,7 +32,7 @@ class Concepts:
             Response (list -> json objects): A list representing all the concepts present in the database.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_all_concepts()
         """
         path = api.Path.GET_ALL_CONCEPTS.value
@@ -51,7 +51,7 @@ class Concepts:
             Response (json object): A json object representing a single concept present in the database based on passed `id`.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_concept_detail(concept_id=1)
         """
         path = api.Path.GET_CONCEPT_DETAIL.value.format(concept_id=concept_id)
@@ -69,7 +69,7 @@ class Concepts:
             Response (json object): A json object representing a single concept export code present in the database based on passed `id`.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_concept_export_codes(concept_id=1)
         """
         path = api.Path.GET_CONCEPT_CODELIST.value.format(concept_id=concept_id)
@@ -87,7 +87,7 @@ class Concepts:
             Response (json object): A json object representing a single concept version present in the database based on passed `id`.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_concept_versions(concept_id=1)
         """
         path = api.Path.GET_CONCEPT_VERSIONS.value.format(concept_id=concept_id)
@@ -106,7 +106,7 @@ class Concepts:
             Response (json object): A json object representing a single concept version detail present in the database based on passed `id`.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_concept_version_detail(concept_id=1, version_id=1)
         """
         path = api.Path.GET_CONCEPT_VERSION_DETAIL.value.format(
@@ -127,7 +127,7 @@ class Concepts:
             Response (json object): A json object representing a single concept_version_export_code present in the database based on passed `id`.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_concept_version_detail(concept_id=1, version_id=1)
         """
         path = api.Path.GET_CONCEPT_VERSION_CODELIST.value.format(

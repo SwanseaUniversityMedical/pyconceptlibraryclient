@@ -1,6 +1,6 @@
 # Phenotypes
 
-::: main.phenotypes.Phenotype
+::: pyconceptlibraryclient.phenotypes.Phenotype
     options:
         members:
             - get_phenotypes

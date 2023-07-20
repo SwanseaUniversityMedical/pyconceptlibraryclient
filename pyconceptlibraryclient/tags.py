@@ -20,7 +20,7 @@ class Tags:
             Response (list -> json objects): A list representing all the tags present in the database.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.tags.get_all_tags()
         """
         path = api.Path.GET_ALL_TAGS.value
@@ -38,7 +38,7 @@ class Tags:
             Response (json object): A json object representing single tag present in the database based on passed `id`.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.tags.get_tag_by_id(1)
         """
         path = api.Path.GET_TAG_BY_ID.value.format(id=id)
