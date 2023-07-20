@@ -34,7 +34,7 @@ class Phenotype:
             Response (list -> json objects): A list representing all the phenotypes present in the database.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_phenotypes()
         """
         path = api.Path.GET_ALL_PHENOTYPES.value
@@ -66,7 +66,7 @@ class Phenotype:
             Response (list -> json objects): A list representing all the phenotypes present in the database.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_phenotype_detail(id=1)
         """
         path = api.Path.GET_PHENOTYPE_DETAIL.value.format(id=id)
@@ -85,7 +85,7 @@ class Phenotype:
             Response (json object): A json object representing a single phenotype present in the database.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_phenotype_versions(id=1)
         """
         path = api.Path.GET_PHENOTYPE_VERSIONS.value.format(id=id)
@@ -104,7 +104,7 @@ class Phenotype:
             Response (json object): A json object representing a single phenotype_version_detail present in the database.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_phenotype_version_detail(id=1, version_id=1)
         """
         path = api.Path.GET_PHENOTYPE_VERSION_DETAIL.value.format(
@@ -124,7 +124,7 @@ class Phenotype:
             Response (list -> json objects): A list representing a phenotype codes present in the database.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_phenotype_code_list(id=1)
         """
         path = api.Path.GET_PHENOTYPE_CODELIST.value.format(id=id)
@@ -143,7 +143,7 @@ class Phenotype:
             Response (list -> json objects): A list representing a phenotype codes list by version, present in the database.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.concepts.get_phenotype_code_list(id=1)
         """
         path = api.Path.GET_PHENOTYPE_VERSION_CODELIST.value.format(

@@ -20,7 +20,7 @@ class Collection:
             Response (list -> json objects): A list representing all the collection present in the database.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.collections.get_all_collections()
         """
         path = api.Path.GET_ALL_COLLECTIONS.value
@@ -38,7 +38,7 @@ class Collection:
             Response (json object): A json object representing single collection present in the database based on passed `id`.
         Examples:
             >>> import pyconceptlibraryclient
-            >>> client = Client(is_public=False)
+            >>> client = pyconceptlibraryclient.Client(is_public=False)
             >>> client.collections.get_collection_by_id(1)
         """
         path = api.Path.GET_COLLECTION_BY_ID.value.format(id=id)

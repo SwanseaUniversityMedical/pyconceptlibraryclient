@@ -1,3 +1,3 @@
 # Concepts
 
-::: main.concepts.Concepts
+::: pyconceptlibraryclient.concepts.Concepts
