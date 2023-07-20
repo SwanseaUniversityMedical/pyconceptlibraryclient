@@ -6,11 +6,7 @@ authors = ["SAIL Dev Team"]
 license = "GNU"
 readme = "README.md"
 packages = [
-    { include = "api" },
-    { include = "assets" },
-    { include = "main" },
-    { include = "test" },
-    { include = "utils" }
+    { include = "pyconceptlibraryclient" }
 ]
 
 [tool.poetry.dependencies]

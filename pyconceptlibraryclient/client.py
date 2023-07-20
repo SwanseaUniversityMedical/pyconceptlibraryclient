@@ -1,8 +1,8 @@
 import api
-from phenotypes import Phenotype
-from collection import Collection
-from concepts import Concepts
-from tags import Tags
+from pyconceptlibraryclient.phenotypes import Phenotype
+from pyconceptlibraryclient.collection import Collection
+from pyconceptlibraryclient.concepts import Concepts
+from pyconceptlibraryclient.tags import Tags
 
 
 class Client(api.Connection):
@@ -53,6 +53,7 @@ def main():
     # client.phenotypes.get_phenotypes()
     # client.collections.get_all_collections()
     # client.concepts.get_all_concepts()
+
 
 if __name__ == "__main__":
     main()
