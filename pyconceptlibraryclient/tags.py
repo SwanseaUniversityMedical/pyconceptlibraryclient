@@ -48,7 +48,7 @@ class Tags:
 
 
 def main():
-    tag = Tags()
+    tag = Tags(is_public=False)
     tag.get_all_tags()
     tag.get_tag_info(3)
 
