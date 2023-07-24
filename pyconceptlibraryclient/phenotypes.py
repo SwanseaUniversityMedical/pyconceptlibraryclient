@@ -114,9 +114,9 @@ class Phenotype:
         utils.check_response(response)
         return response
 
-    def get_phenotype_code_list(self, id: str):
+    def get_phenotype_field(self, id: str, field: str):
         """
-        This function returns the codes list based on the given phenotype id.
+        This function returns the field based on the given phenotype id.
 
         Parameters:
             id (string): Phenotype Id to retrieve a particular phenotype from the database.
@@ -125,16 +125,16 @@ class Phenotype:
         Examples:
             >>> import pyconceptlibraryclient
             >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_phenotype_code_list(id=1)
+            >>> client.concepts.get_phenotype_code_list(id=1, field="<enter your field here>")
         """
-        path = api.Path.GET_PHENOTYPE_CODELIST.value.format(id=id)
+        path = api.Path.GET_PHENOTYPE_FIELD.value.format(id=id, field=field)
         response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
         return response
 
-    def get_phenotype_code_list_by_version(self, id: str, version_id: int):
+    def get_phenotype_field_by_version(self, id: str, version_id: int, field: str):
         """
-        This function returns the codes list based on the given phenotype id.
+        This function returns the field based on the given phenotype id and version id.
 
         Parameters:
             id (string): Phenotype Id to retrieve a particular phenotype from the database.
@@ -144,10 +144,10 @@ class Phenotype:
         Examples:
             >>> import pyconceptlibraryclient
             >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_phenotype_code_list(id=1)
+            >>> client.concepts.get_phenotype_code_list(id=1, version_id=2, field="<enter your field>")
         """
-        path = api.Path.GET_PHENOTYPE_VERSION_CODELIST.value.format(
-            id=id, version_id=version_id
+        path = api.Path.GET_PHENOTYPE_VERSION_FIELD.value.format(
+            id=id, version_id=version_id, field=field
         )
         response = requests.get(self.urlBuilder.get_url(path))
         utils.check_response(response)
@@ -333,12 +333,12 @@ def main():
     # phenotype.get_phenotype_detail("PH1", search="Alcohol")
     # phenotype.get_phenotype_versions("PH1")
     # phenotype.get_phenotype_version_detail("PH1", 3)
-    # phenotype.get_phenotype_code_list("PH1")
+    # phenotype.get_phenotype_field("PH1", "coding_system")
     # phenotype.get_phenotype_code_list_by_version("PH1", 2)
     # phenotype.save_phenotype_definition("PH1", "./assets/gen", 2)
     # phenotype.save_phenotype_definition("PH2", "./assets/gen", 4)
     # phenotype.save_phenotype_definition("PH3", "./assets/gen", 6)
-    phenotype.upload_phenotype(is_update=False)
+    # phenotype.upload_phenotype(is_update=False)
 
 
 if __name__ == "__main__":
