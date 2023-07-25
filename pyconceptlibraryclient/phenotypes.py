@@ -153,7 +153,7 @@ class Phenotype:
         utils.check_response(response)
         return response
 
-    def save_phenotype_definition(self, id: str, dir: str = None, version_id=None):
+    def save_phenotype_definition(self, id: str, version_id=None):
         """
         Description TODO
         """
@@ -205,13 +205,8 @@ class Phenotype:
                                 result[field_name] = field_value[0]["value"]
                             else:
                                 result[field_name] = field_value[0]
-
-        yaml.dump(
-            result,
-            open(f"./assets/gen/{id}-definition-file.yaml", "w"),
-            default_flow_style=False,
-            sort_keys=False,
-        )
+        dest_file_picker = utils.SaveFile(result)
+        dest_file_picker.save_file()
 
     def create_phenotype(self, data):
         """
@@ -327,7 +322,7 @@ class Phenotype:
 
 
 def main():
-    phenotype = Phenotype(is_public=False)
+    phenotype = Phenotype(is_public=True)
     # phenotype.get_phenotypes()
     # phenotype.get_phenotypes(search="Alcohol")
     # phenotype.get_phenotype_detail("PH1", search="Alcohol")
@@ -335,7 +330,7 @@ def main():
     # phenotype.get_phenotype_version_detail("PH1", 3)
     # phenotype.get_phenotype_field("PH1", "coding_system")
     # phenotype.get_phenotype_code_list_by_version("PH1", 2)
-    # phenotype.save_phenotype_definition("PH1", "./assets/gen", 2)
+    # phenotype.save_phenotype_definition("PH1", 2)
     # phenotype.save_phenotype_definition("PH2", "./assets/gen", 4)
     # phenotype.save_phenotype_definition("PH3", "./assets/gen", 6)
     # phenotype.upload_phenotype(is_update=False)
