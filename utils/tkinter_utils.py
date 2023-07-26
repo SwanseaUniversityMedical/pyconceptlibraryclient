@@ -69,3 +69,39 @@ class SaveFile:
                 default_flow_style=False,
                 sort_keys=False,
             )
+
+
+class OpenFile:
+    def __init__(self) -> None:
+        self.file_path = None
+
+    def open_file_picker(self, window):
+        self.file_path = filedialog.askopenfilename()
+        print("Selected file:", self.file_path)
+        if self.file_path:
+            window.destroy()
+
+    def upload_file(self):
+        # GUI Setup
+        app = tk.Tk()
+        app.title("File Picker")
+
+        # Get the screen width and height
+        screen_width = app.winfo_screenwidth()
+        screen_height = app.winfo_screenheight()
+
+        # Calculate the center coordinates
+        center_x = int((screen_width - 300) / 2)
+        center_y = int((screen_height - 150) / 2)
+
+        # Set the window size and position it in the center of the screen
+        app.geometry(f"300x150+{center_x}+{center_y}")
+
+        file_picker_button = tk.Button(
+            app, text="Select File", command=lambda: self.open_file_picker(app)
+        )
+        file_picker_button.pack(pady=20)
+
+        app.mainloop()
+
+        return self.file_path
