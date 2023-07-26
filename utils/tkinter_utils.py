@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import filedialog
+import yaml
 
 
 class LoginWindow:
@@ -47,4 +49,23 @@ class LoginWindow:
         else:
             messagebox.showwarning(
                 "Incomplete Credentials", "Please enter both username and password."
+            )
+
+
+class SaveFile:
+    def __init__(self, content) -> None:
+        self.content = content
+
+    def save_file(self):
+        file_path = filedialog.asksaveasfilename(
+            filetypes=[("YAML files", "*.yaml or *.yml"), ("JSON files", "*.json")]
+        )
+        if not file_path:
+            return
+        with open(file_path, "w") as file:
+            yaml.dump(
+                self.content,
+                file,
+                default_flow_style=False,
+                sort_keys=False,
             )
