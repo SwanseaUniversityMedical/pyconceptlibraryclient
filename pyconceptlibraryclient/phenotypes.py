@@ -234,9 +234,7 @@ class Phenotype:
         utils.check_response(response)
         return response
 
-    def upload_phenotype(
-        self, is_update: bool, dir: str = "./assets/definition_file_create.yaml"
-    ):
+    def upload_phenotype(self, is_update: bool):
         """
         This function creates/updates a phenotype defined in the form of json which is passed as an argument depending upon
         the parameter 'is_update' that is passed.
@@ -246,6 +244,8 @@ class Phenotype:
         Returns:
             Response (json object): Consisting of `data` and `phenotype_response`
         """
+        file_picker = utils.OpenFile()
+        dir = file_picker.upload_file()
         data = utils.yaml_to_json(dir)
         if data:
             modified_data = utils.format_phenotype(data, is_update)
@@ -304,16 +304,8 @@ class Phenotype:
                 response = self.create_phenotype(new_phenotype)
                 phenotype_response_json = response.json()
                 result = {"data": json.loads(data), "response": phenotype_response_json}
-                yaml.dump(
-                    result,
-                    open(
-                        utils.constants.PATH_FOR_STORING_FILE_AFTER_CREATE_PHENOTYPE
-                        + f"{phenotype_response_json['entity']['id']}-definition-output-file.yaml",
-                        "w",
-                    ),
-                    default_flow_style=False,
-                    sort_keys=False,
-                )
+                dest_file_picker = utils.SaveFile(result)
+                dest_file_picker.save_file()
             return result
         else:
             raise ValueError(
@@ -322,7 +314,7 @@ class Phenotype:
 
 
 def main():
-    phenotype = Phenotype(is_public=True)
+    phenotype = Phenotype(is_public=False)
     # phenotype.get_phenotypes()
     # phenotype.get_phenotypes(search="Alcohol")
     # phenotype.get_phenotype_detail("PH1", search="Alcohol")
