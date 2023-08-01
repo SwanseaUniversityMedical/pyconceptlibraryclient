@@ -19,6 +19,18 @@ class LoginWindow:
         window.eval(f"tk::PlaceWindow {str(window)} center")
         return window
 
+    def get_url_dropdown_field(self, window, url_values: list):
+        self.clicked = tk.StringVar()
+        self.clicked.set("Pick the URL")
+        drop = tk.OptionMenu(window, self.clicked, *url_values)
+        drop.pack(pady=20)
+
+        # Wait until a value is set to self.url_value
+        window.wait_variable(self.clicked)
+
+        # Return the StringVar itself (optional, useful if you want to use it elsewhere)
+        return self.clicked
+
     def get_username_field(self, window):
         username_label = tk.Label(window, text="Username")
         username_label.pack()
@@ -36,6 +48,12 @@ class LoginWindow:
     def get_login_button(self, window):
         login_button = tk.Button(
             window, text="Login", command=lambda: self.store_credentials(window)
+        )
+        login_button.pack()
+
+    def get_connect_button(self, window):
+        login_button = tk.Button(
+            window, text="Connect", command=lambda: window.destroy()
         )
         login_button.pack()
 
