@@ -9,6 +9,7 @@ class Client(api.Connection):
     def __init__(self, is_public: bool) -> None:
         super().__init__(is_public)
         self.is_public = is_public
+        self.baseurl, self.auth = super().establish()
 
     @property
     def phenotypes(self) -> Phenotype:
@@ -16,7 +17,7 @@ class Client(api.Connection):
         Entrypoint for Phenotypes through the client instance
         """
         if not getattr(self, "_phenotypes", None):
-            setattr(self, "_phenotypes", Phenotype(self.is_public))
+            setattr(self, "_phenotypes", Phenotype(url=self.baseurl, auth=self.auth))
         return getattr(self, "_phenotypes")
 
     @property
@@ -25,7 +26,7 @@ class Client(api.Connection):
         Entrypoint for Tags through the client instance
         """
         if not getattr(self, "_tags", None):
-            setattr(self, "_tags", Tags(self.is_public))
+            setattr(self, "_tags", Tags(url=self.baseurl, auth=self.auth))
         return getattr(self, "_tags")
 
     @property
@@ -34,7 +35,7 @@ class Client(api.Connection):
         Entrypoint for Collections through the client instance
         """
         if not getattr(self, "_collections", None):
-            setattr(self, "_collections", Collection(self.is_public))
+            setattr(self, "_collections", Collection(url=self.baseurl, auth=self.auth))
         return getattr(self, "_collections")
 
     @property
@@ -43,8 +44,11 @@ class Client(api.Connection):
         Entrypoint for Concepts through the client instance
         """
         if not getattr(self, "_concepts", None):
-            print(self.is_public)
-            setattr(self, "_concepts", Concepts(self.is_public))
+            setattr(
+                self,
+                "_concepts",
+                Concepts(url=self.baseurl, auth=self.auth),
+            )
         return getattr(self, "_concepts")
 
 
@@ -53,6 +57,7 @@ def main():
     # client.phenotypes.get_phenotypes()
     # client.collections.get_all_collections()
     # client.concepts.get_all_concepts()
+    # client.tags.get_all_tags()
 
 
 if __name__ == "__main__":

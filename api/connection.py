@@ -9,15 +9,20 @@ class Connection:
     """
 
     def __init__(self, is_public: bool) -> None:
-        login_ui = utils.LoginWindow(is_public)
-        login_ui.start()
-        self.baseurl = login_ui.baseurl
-        if not is_public:
+        self.login_ui = utils.LoginWindow(is_public)
+        self.baseurl = None
+        self.is_public = is_public
+
+    def establish(self):
+        self.login_ui.start()
+        self.baseurl = self.login_ui.baseurl
+        if not self.is_public:
             self.auth = HTTPBasicAuth(
-                username=login_ui.user, password=login_ui.password
+                username=self.login_ui.user, password=self.login_ui.password
             )
         else:
             self.auth = None
+        return self.baseurl, self.auth
 
 
 def main():

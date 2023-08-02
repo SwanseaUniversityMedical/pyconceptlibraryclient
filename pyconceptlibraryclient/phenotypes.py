@@ -9,9 +9,9 @@ class Phenotype:
     This class consists of the endpoints related to the Phenotypes.
     """
 
-    def __init__(self, is_public: bool = True) -> None:
-        self.conn = api.Connection(is_public)
-        self.urlBuilder = utils.URLBuilder(self.conn.baseurl)
+    def __init__(self, url, auth) -> None:
+        self.urlBuilder = utils.URLBuilder(url)
+        self.auth = auth
 
     def get_phenotypes(self, **kwargs):
         """
@@ -39,7 +39,9 @@ class Phenotype:
         """
         path = api.Path.GET_ALL_PHENOTYPES.value
         payload = {k: v for k, v in kwargs.items() if v is not None}
-        response = requests.get(self.urlBuilder.get_url(path), params=payload)
+        response = requests.get(
+            self.urlBuilder.get_url(path), params=payload, auth=self.auth
+        )
         utils.check_response(response)
         return response
 
@@ -71,7 +73,9 @@ class Phenotype:
         """
         path = api.Path.GET_PHENOTYPE_DETAIL.value.format(id=id)
         payload = {k: v for k, v in kwargs.items() if v is not None}
-        response = requests.get(self.urlBuilder.get_url(path), params=payload)
+        response = requests.get(
+            self.urlBuilder.get_url(path), params=payload, auth=self.auth
+        )
         utils.check_response(response)
         return response
 
@@ -89,7 +93,7 @@ class Phenotype:
             >>> client.concepts.get_phenotype_versions(id=1)
         """
         path = api.Path.GET_PHENOTYPE_VERSIONS.value.format(id=id)
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
@@ -110,7 +114,7 @@ class Phenotype:
         path = api.Path.GET_PHENOTYPE_VERSION_DETAIL.value.format(
             id=id, version_id=version_id
         )
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
@@ -128,7 +132,7 @@ class Phenotype:
             >>> client.concepts.get_phenotype_code_list(id=1, field="<enter your field here>")
         """
         path = api.Path.GET_PHENOTYPE_FIELD.value.format(id=id, field=field)
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
@@ -149,7 +153,7 @@ class Phenotype:
         path = api.Path.GET_PHENOTYPE_VERSION_FIELD.value.format(
             id=id, version_id=version_id, field=field
         )
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
@@ -215,7 +219,7 @@ class Phenotype:
         path = api.Path.CREATE_PHENOTYPE.value
         response = requests.post(
             self.urlBuilder.get_url(path),
-            auth=self.conn.auth,
+            auth=self.auth,
             data=json.dumps(data),
         )
         utils.check_response(response)
@@ -228,7 +232,7 @@ class Phenotype:
         path = api.Path.UPDATE_PHENOTYPE.value
         response = requests.put(
             self.urlBuilder.get_url(path),
-            auth=self.conn.auth,
+            auth=self.auth,
             data=json.dumps(data),
         )
         utils.check_response(response)

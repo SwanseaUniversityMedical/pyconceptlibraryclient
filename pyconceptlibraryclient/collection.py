@@ -8,9 +8,9 @@ class Collection:
     This class consists of the endpoints related to the Collections.
     """
 
-    def __init__(self, is_public: bool = True) -> None:
-        self.conn = api.Connection(is_public)
-        self.urlBuilder = utils.URLBuilder(self.conn.baseurl)
+    def __init__(self, url, auth) -> None:
+        self.urlBuilder = utils.URLBuilder(url)
+        self.auth = auth
 
     def get_all_collections(self):
         """
@@ -24,7 +24,7 @@ class Collection:
             >>> client.collections.get_all_collections()
         """
         path = api.Path.GET_ALL_COLLECTIONS.value
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
@@ -42,7 +42,7 @@ class Collection:
             >>> client.collections.get_collection_by_id(1)
         """
         path = api.Path.GET_COLLECTION_BY_ID.value.format(id=id)
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 

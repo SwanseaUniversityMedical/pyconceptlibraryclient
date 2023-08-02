@@ -8,9 +8,9 @@ class Concepts:
     This class consists of the endpoints related to the Concepts.
     """
 
-    def __init__(self, is_public: bool = True) -> None:
-        self.conn = api.Connection(is_public)
-        self.urlBuilder = utils.URLBuilder(self.conn.baseurl)
+    def __init__(self, url, auth) -> None:
+        self.urlBuilder = utils.URLBuilder(url)
+        self.auth = auth
 
     def get_all_concepts(self, **kwargs):
         """
@@ -37,7 +37,9 @@ class Concepts:
         """
         path = api.Path.GET_ALL_CONCEPTS.value
         payload = {k: v for k, v in kwargs.items() if v is not None}
-        response = requests.get(self.urlBuilder.get_url(path), params=payload)
+        response = requests.get(
+            self.urlBuilder.get_url(path), params=payload, auth=self.auth
+        )
         utils.check_response(response)
         return response
 
@@ -55,7 +57,7 @@ class Concepts:
             >>> client.concepts.get_concept_detail(concept_id=1)
         """
         path = api.Path.GET_CONCEPT_DETAIL.value.format(concept_id=concept_id)
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
@@ -73,7 +75,7 @@ class Concepts:
             >>> client.concepts.get_concept_export_codes(concept_id=1)
         """
         path = api.Path.GET_CONCEPT_CODELIST.value.format(concept_id=concept_id)
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
@@ -91,7 +93,7 @@ class Concepts:
             >>> client.concepts.get_concept_versions(concept_id=1)
         """
         path = api.Path.GET_CONCEPT_VERSIONS.value.format(concept_id=concept_id)
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
@@ -112,7 +114,7 @@ class Concepts:
         path = api.Path.GET_CONCEPT_VERSION_DETAIL.value.format(
             concept_id=concept_id, version_id=version_id
         )
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
@@ -133,7 +135,7 @@ class Concepts:
         path = api.Path.GET_CONCEPT_VERSION_CODELIST.value.format(
             concept_id=concept_id, version_id=version_id
         )
-        response = requests.get(self.urlBuilder.get_url(path))
+        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
         utils.check_response(response)
         return response
 
