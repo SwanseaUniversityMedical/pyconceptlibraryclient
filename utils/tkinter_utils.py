@@ -2,24 +2,24 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
 import yaml
+from constants import Path
 
 
 class LoginWindow:
-    def __init__(self) -> None:
+    def __init__(self, is_public: bool) -> None:
         self.user = None
         self.password = None
-        self.username_entry = None
-        self.password_entry = None
+        self.is_public = is_public
+        self.baseurl = None
 
-    def create_window(self):
         window = tk.Tk()
         window.title("Login")
         window.geometry("500x300")
         window.eval("tk::PlaceWindow . center")
         window.eval(f"tk::PlaceWindow {str(window)} center")
-        return window
 
-    def get_url_dropdown_field(self, window, url_values: list):
+        url_values: list = [Path.BASEURL_LOCAL.value, Path.BASEURL_PROD.value]
+
         self.clicked = tk.StringVar()
         self.clicked.set("Pick the URL")
         drop = tk.OptionMenu(window, self.clicked, *url_values)
@@ -27,42 +27,47 @@ class LoginWindow:
 
         # Wait until a value is set to self.url_value
         window.wait_variable(self.clicked)
+        self.baseurl = self.clicked.get().strip()
 
-        # Return the StringVar itself (optional, useful if you want to use it elsewhere)
-        return self.clicked
+        if not self.is_public:
+            username_label = tk.Label(window, text="Username")
+            username_label.pack(pady=10)
+            username_entry = tk.Entry(window)
+            username_entry.pack(pady=10)
 
-    def get_username_field(self, window):
-        username_label = tk.Label(window, text="Username")
-        username_label.pack()
-        self.username_entry = tk.Entry(window)
-        self.username_entry.pack()
-        return self.username_entry
+            password_label = tk.Label(window, text="Password")
+            password_label.pack(pady=10)
+            password_entry = tk.Entry(window, show="*")
+            password_entry.pack(pady=10)
 
-    def get_password_field(self, window):
-        password_label = tk.Label(window, text="Password")
-        password_label.pack()
-        self.password_entry = tk.Entry(window, show="*")
-        self.password_entry.pack()
-        return self.password_entry
+            login_button = tk.Button(
+                window,
+                text="Login & Close This Window",
+                command=lambda: self.store_credentials(
+                    window, username_entry, password_entry
+                ),
+            )
+            login_button.pack(pady=10)
+            print(self.user)
+            print(self.password)
+            window.mainloop()
+        else:
+            connect_button = tk.Button(
+                window,
+                text="Connect & Close This Window",
+                command=window.destroy,
+            )
+            connect_button.pack(pady=10)
+            window.mainloop()
 
-    def get_login_button(self, window):
-        login_button = tk.Button(
-            window, text="Login", command=lambda: self.store_credentials(window)
-        )
-        login_button.pack()
-
-    def get_connect_button(self, window):
-        login_button = tk.Button(
-            window, text="Connect", command=lambda: window.destroy()
-        )
-        login_button.pack()
-
-    def store_credentials(self, window):
-        user = self.username_entry
-        password = self.password_entry
+    def store_credentials(self, window, username_entry, password_entry):
+        user = username_entry.get()
+        password = password_entry.get()
         if user and password:
-            self.user = self.username_entry.get()
-            self.password = self.password_entry.get()
+            print(user)
+            print(password)
+            self.user = username_entry.get()
+            self.password = password_entry.get()
             window.destroy()
         else:
             messagebox.showwarning(
