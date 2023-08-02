@@ -10,7 +10,7 @@ class Concepts:
 
     def __init__(self, is_public: bool = True) -> None:
         self.conn = api.Connection(is_public)
-        self.urlBuilder = utils.URLBuilder()
+        self.urlBuilder = utils.URLBuilder(self.conn.baseurl)
 
     def get_all_concepts(self, **kwargs):
         """

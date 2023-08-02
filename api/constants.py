@@ -6,6 +6,10 @@ class Path(Enum):
     This class consits of the specific path resource or endpoint on the server that we want to access.
     """
 
+    # Main URL
+    BASEURL_LOCAL = "http://localhost:8000/api/v1"
+    BASEURL_PROD = "<Add Prod URL>"  # TODO Add this later
+
     # Concepts
     GET_ALL_CONCEPTS = "concepts"
     GET_CONCEPT_DETAIL = "concepts/C{concept_id}/detail"
