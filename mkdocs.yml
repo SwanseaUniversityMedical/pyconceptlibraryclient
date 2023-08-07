@@ -53,6 +53,7 @@ nav:
   - "Tags": tags.md
   - "Phenotypes": phenotypes.md
   - "Concepts": concepts.md
+  - "DataSources": datasources.md
   - "For Developers": for_developer.md
 
 markdown_extensions:
