@@ -3,6 +3,7 @@ from pyconceptlibraryclient.phenotypes import Phenotype
 from pyconceptlibraryclient.collection import Collection
 from pyconceptlibraryclient.concepts import Concepts
 from pyconceptlibraryclient.tags import Tags
+from pyconceptlibraryclient.datasources import DataSources
 
 
 class Client(api.Connection):
@@ -51,6 +52,19 @@ class Client(api.Connection):
             )
         return getattr(self, "_concepts")
 
+    @property
+    def datasources(self) -> DataSources:
+        """
+        Entrypoint for DataSources through the client instance
+        """
+        if not getattr(self, "_datasources", None):
+            setattr(
+                self,
+                "_datasources",
+                DataSources(url=self.baseurl, auth=self.auth),
+            )
+        return getattr(self, "_datasources")
+
 
 def main():
     client = Client(is_public=False)
@@ -58,6 +72,8 @@ def main():
     # client.collections.get_all_collections()
     # client.concepts.get_all_concepts()
     # client.tags.get_all_tags()
+    # client.datasources.get_all()
+    # client.datasources.get_one_detail(1)
 
 
 if __name__ == "__main__":

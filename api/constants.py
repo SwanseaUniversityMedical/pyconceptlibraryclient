@@ -37,3 +37,7 @@ class Path(Enum):
     GET_PHENOTYPE_VERSION_FIELD = "phenotypes/{id}/version/{version_id}/export/{field}"
     CREATE_PHENOTYPE = "phenotypes/create/"
     UPDATE_PHENOTYPE = "phenotypes/update/"
+
+    # Datasources
+    GET_ALL_DATASOURCES = "data-sources"
+    GET_DATASOURCE_BY_ID = "data-sources/{id}/detail"
