@@ -41,3 +41,9 @@ class Path(Enum):
     # Datasources
     GET_ALL_DATASOURCES = "data-sources"
     GET_DATASOURCE_BY_ID = "data-sources/{id}/detail"
+
+    # Templates
+    GET_ALL_TEMPLATES = "templates"
+    GET_TEMPLATE_DETAIL = "templates/{id}/detail/"
+    GET_TEMPLATE_VERSIONS = "templates/{id}/get-versions/"
+    GET_TEMPLATE_VERSION_DETAIL = "templates/{id}/version/{version_id}/detail/"
