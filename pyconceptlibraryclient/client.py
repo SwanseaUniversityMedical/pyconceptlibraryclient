@@ -4,6 +4,7 @@ from pyconceptlibraryclient.collection import Collection
 from pyconceptlibraryclient.concepts import Concepts
 from pyconceptlibraryclient.tags import Tags
 from pyconceptlibraryclient.datasources import DataSources
+from pyconceptlibraryclient.templates import Templates
 
 
 class Client(api.Connection):
@@ -65,6 +66,19 @@ class Client(api.Connection):
             )
         return getattr(self, "_datasources")
 
+    @property
+    def templates(self) -> Templates:
+        """
+        Entrypoint for Templates through the client instance
+        """
+        if not getattr(self, "_templates", None):
+            setattr(
+                self,
+                "_templates",
+                Templates(url=self.baseurl, auth=self.auth),
+            )
+        return getattr(self, "_templates")
+
 
 def main():
     client = Client(is_public=False)
@@ -74,6 +88,10 @@ def main():
     # client.tags.get_all_tags()
     # client.datasources.get_all()
     # client.datasources.get_one_detail(1)
+    # client.templates.get_all_templates()
+    # client.templates.get_template_detail(1)
+    # client.templates.get_template_versions(1)
+    # client.templates.get_template_version_detail(1,1)
 
 
 if __name__ == "__main__":

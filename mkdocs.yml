@@ -54,6 +54,7 @@ nav:
   - "Phenotypes": phenotypes.md
   - "Concepts": concepts.md
   - "DataSources": datasources.md
+  - "Templates": templates.md
   - "For Developers": for_developer.md
 
 markdown_extensions:
