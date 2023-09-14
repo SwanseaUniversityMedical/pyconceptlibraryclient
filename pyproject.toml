@@ -2,7 +2,13 @@
 name = "pyconceptlibraryclient"
 version = "0.1.0"
 description = "Python API Client for Concept Library/HDR UK Phenotype Library"
-authors = ["SAIL Dev Team"]
+authors = [
+    "Sambhav Dave <sambhav.dave@swansea.ac.uk>",
+    "Ieuan Scanlon <ieuan.scanlon@swansea.ac.uk>"
+]
+maintainers = [
+    "Ieuan Scanlon <ieuan.scanlon@swansea.ac.uk>"
+]
 license = "GNU"
 readme = "README.md"
 packages = [
