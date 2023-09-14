@@ -18,7 +18,7 @@ class Datasources(Endpoint):
     
     Examples:
       >>> import pyconceptlibraryclient
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
       >>> client.datasources.get()
     '''
     url = self._build_url(Path.GET_ALL_DATASOURCES)
@@ -38,7 +38,7 @@ class Datasources(Endpoint):
     
     Examples:
         >>> import pyconceptlibraryclient
-        >>> client = pyconceptlibraryclient.Client(is_public=False)
+        >>> client = Client(is_public=False)
         >>> client.datasources.get_detail(1)
     '''
     url = self._build_url(Path.GET_DATASOURCE_BY_ID, id=id)

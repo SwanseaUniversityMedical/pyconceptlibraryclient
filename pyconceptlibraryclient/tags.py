@@ -18,7 +18,7 @@ class Tags(Endpoint):
     
     Examples:
       >>> import pyconceptlibraryclient
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
       >>> client.tags.get()
     '''
     url = self._build_url(Path.GET_ALL_TAGS)
@@ -38,7 +38,7 @@ class Tags(Endpoint):
     
     Examples:
         >>> import pyconceptlibraryclient
-        >>> client = pyconceptlibraryclient.Client(is_public=False)
+        >>> client = Client(is_public=False)
         >>> client.tags.get_detail(1)
     '''
     url = self._build_url(Path.GET_TAG_BY_ID, id=id)

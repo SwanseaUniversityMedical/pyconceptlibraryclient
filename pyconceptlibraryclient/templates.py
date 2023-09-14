@@ -18,7 +18,7 @@ class Templates(Endpoint):
     
     Examples:
       >>> import pyconceptlibraryclient
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
       >>> client.templates.get()
     '''
     url = self._build_url(Path.GET_ALL_TEMPLATES)
@@ -38,7 +38,7 @@ class Templates(Endpoint):
     
     Examples:
         >>> import pyconceptlibraryclient
-        >>> client = pyconceptlibraryclient.Client(is_public=False)
+        >>> client = Client(is_public=False)
         >>> client.templates.get_versions(1)
     '''
     url = self._build_url(Path.GET_TEMPLATE_VERSIONS, id=id)
@@ -60,7 +60,7 @@ class Templates(Endpoint):
     
     Examples:
         >>> import pyconceptlibraryclient
-        >>> client = pyconceptlibraryclient.Client(is_public=False)
+        >>> client = Client(is_public=False)
 
         >>> # Get detail of a template
         >>> client.templates.get_detail(1)

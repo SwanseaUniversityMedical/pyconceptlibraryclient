@@ -24,7 +24,7 @@ class Concepts(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
 
       >>> # Get all concepts
       >>> client.concepts.get()
@@ -49,7 +49,7 @@ class Concepts(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
       >>> client.concepts.get_versions('PH1')
     '''
     url = self._build_url(Path.GET_CONCEPT_VERSIONS, id=id)
@@ -71,7 +71,7 @@ class Concepts(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
 
       >>> # Get detail of phenotype, PH1
       >>> client.concepts.get_detail('PH1')
@@ -99,7 +99,7 @@ class Concepts(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
 
       >>> # Get codelist of phenotype, PH1
       >>> client.concepts.get_codelist('PH1')

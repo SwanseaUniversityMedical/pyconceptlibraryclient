@@ -19,32 +19,32 @@ class Client():
   ### Public API
   ``` python
   from pyconceptlibraryclient import Client
-  client = pyconceptlibraryclient.Client(is_public=True)
+  client = Client(is_public=True)
   ```
 
   ### Authenticated API (terminal requests credentials)
   ``` python
   from pyconceptlibraryclient import Client
-  client = pyconceptlibraryclient.Client(is_public=False)
+  client = Client(is_public=False)
   ```
 
   ### Authenticated API (providing credentials)
   ``` python
   from pyconceptlibraryclient import Client
-  client = pyconceptlibraryclient.Client(username='my-username', password='my-password')
+  client = Client(username='my-username', password='my-password')
   ```
 
   ## Providing a different URL
   ### Using built-in domains
   ``` python
   from pyconceptlibraryclient import Client, Domains
-  client = pyconceptlibraryclient.Client(is_public=False, url=Domains.HDRUK)
+  client = Client(is_public=False, url=Domains.HDRUK)
   ```
   
   ### Using a custom URL
   ``` python
   from pyconceptlibraryclient import Client
-  client = pyconceptlibraryclient.Client(is_public=False, url='my-custom-url')
+  client = Client(is_public=False, url='my-custom-url')
   ```
   '''
 

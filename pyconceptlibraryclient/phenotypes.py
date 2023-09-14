@@ -36,7 +36,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
 
       >>> # Get all phenotypes
       >>> client.phenotypes.get()
@@ -61,7 +61,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
       >>> client.phenotypes.get_versions('PH1')
     '''
     url = self._build_url(Path.GET_PHENOTYPE_VERSIONS, id=id)
@@ -83,7 +83,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
 
       >>> # Get detail of phenotype, PH1
       >>> client.phenotypes.get_detail('PH1')
@@ -111,7 +111,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
 
       >>> # Get codelist of phenotype, PH1
       >>> client.phenotypes.get_codelist('PH1')
@@ -136,7 +136,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
 
       >>> # Get codelist of phenotype, PH1
       >>> client.phenotypes.save_to_file('./path/to/file.yaml', 'PH1')
@@ -162,7 +162,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
       >>> client.phenotypes.create('./path/to/file.yaml')
     '''
     data = utils.read_from_yaml_file(path)
@@ -188,7 +188,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client = Client(is_public=False)
       >>> client.phenotypes.create('./path/to/file.yaml')
     '''
     data = utils.read_from_yaml_file(path)
