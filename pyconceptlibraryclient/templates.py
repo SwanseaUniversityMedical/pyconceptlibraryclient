@@ -1,86 +1,75 @@
-import api
-import utils
-import requests
+from pyconceptlibraryclient.endpoint import Endpoint
+from pyconceptlibraryclient.constants import Path
 
+class Templates(Endpoint):
+  '''
+  Queries templates/ endpoints
+  '''
+  
+  def __init__(self, *args, **kwargs) -> None:
+    super(Templates, self).__init__(*args, **kwargs)
 
-class Templates:
-    """
-    This class consists of the endpoints related to the Templates.
-    """
+  def get(self) -> list | None:
+    '''
+    Queries templates/
 
-    def __init__(self, url, auth) -> None:
-        self.urlBuilder = utils.URLBuilder(url)
-        self.auth = auth
+    Returns:
+      Response (list): A list containing all the templates present in the database
+    
+    Examples:
+      >>> import pyconceptlibraryclient
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client.templates.get()
+    '''
+    url = self._build_url(Path.GET_ALL_TEMPLATES)
 
-    def get_all_templates(self):
-        """
-        This function returns all the templates.
+    response = self._get(url)
+    return response
 
-        Returns:
-            Response (list -> json objects): A list representing all the templates present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.templates.get_all_templates()
-        """
-        path = api.Path.GET_ALL_TEMPLATES.value
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+  def get_versions(self, id: int) -> list | None:
+    '''
+    Queries templates/{id}/get-versions/
 
-    def get_template_detail(self, id: int):
-        """
-        This function returns the template info based on the given template id.
+    Parameters:
+      id (int): Template ID
+    
+    Returns:
+      Response (list): Version list of queried template
+    
+    Examples:
+        >>> import pyconceptlibraryclient
+        >>> client = pyconceptlibraryclient.Client(is_public=False)
+        >>> client.templates.get_versions(1)
+    '''
+    url = self._build_url(Path.GET_TEMPLATE_VERSIONS, id=id)
 
-        Parameters:
-            id (int): Template Id to retrieve a particular `template` object
-        Returns:
-            Response (json object): A json object representing single template present in the database based on passed `id`.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.templates.get_template_detail(1)
-        """
-        path = api.Path.GET_TEMPLATE_DETAIL.value.format(id=id)
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+    response = self._get(url)
+    return response
 
-    def get_template_version_detail(self, id: int, version_id: int):
-        """
-        This function returns the template-version info based on the given template id and version id.
+  def get_detail(self, id: int, version_id: int | None = None) -> list | None:
+    '''
+    Queries templates/{id}/detail/ or templates/{id}/versions/{version_id}/detail/ if
+    version_id is supplied
 
-        Parameters:
-            id (int): Template Id to retrieve a particular `template` object.
-            version_id (int): Version Id to retrieve a particular `template_version` object.
-        Returns:
-            Response (json object): A json object representing single template with version information present in the database based on passed `id` and `version_id`.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.templates.get_template_version_detail(1, 2)
-        """
-        path = api.Path.GET_TEMPLATE_VERSION_DETAIL.value.format(
-            id=id, version_id=version_id
-        )
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+    Parameters:
+      id (int): Template ID
+      version_id (int): Version ID
+    
+    Returns:
+      Response (list): Details of queried template
+    
+    Examples:
+        >>> import pyconceptlibraryclient
+        >>> client = pyconceptlibraryclient.Client(is_public=False)
 
-    def get_template_versions(self, id: int):
-        """
-        This function returns the template-version list based on the given template id.
+        >>> # Get detail of a template
+        >>> client.templates.get_detail(1)
+        
+        >>> # Get detail of a template with specific version
+        >>> client.templates.get_detail(1, version_id=1)
+    '''
+    url = Path.GET_TEMPLATE_DETAIL_VERSION if version_id else Path.GET_TEMPLATE_DETAIL
+    url = self._build_url(url, id=id, version_id=version_id)
 
-        Parameters:
-            id (int): Template Id to retrieve a particular `template` object.
-        Returns:
-            Response (list -> json object): A list representing all the template versions present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.templates.get_template_versions(1)
-        """
-        path = api.Path.GET_TEMPLATE_VERSIONS.value.format(id=id)
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+    response = self._get(url)
+    return response

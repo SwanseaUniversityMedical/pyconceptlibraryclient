@@ -1,4 +1,4 @@
 # Collections
 
-::: pyconceptlibraryclient.collection.Collection
+::: pyconceptlibraryclient.collections.Collections
         

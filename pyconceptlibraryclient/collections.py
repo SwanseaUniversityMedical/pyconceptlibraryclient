@@ -1,47 +1,47 @@
 from pyconceptlibraryclient.endpoint import Endpoint
 from pyconceptlibraryclient.constants import Path
 
-class Tags(Endpoint):
+class Collections(Endpoint):
   '''
-  Queries tags/ endpoints
+  Queries collections/ endpoints
   '''
   
   def __init__(self, *args, **kwargs) -> None:
-    super(Tags, self).__init__(*args, **kwargs)
+    super(Collections, self).__init__(*args, **kwargs)
 
   def get(self) -> list | None:
     '''
-    Queries tags/
+    Queries collections/
 
     Returns:
-      Response (list): A list containing all the tags present in the database
+      Response (list): A list containing all the collections present in the database
     
     Examples:
       >>> import pyconceptlibraryclient
       >>> client = pyconceptlibraryclient.Client(is_public=False)
-      >>> client.tags.get()
+      >>> client.collections.get()
     '''
-    url = self._build_url(Path.GET_ALL_TAGS)
+    url = self._build_url(Path.GET_ALL_COLLECTIONS)
 
     response = self._get(url)
     return response
 
   def get_detail(self, id: int) -> list | None:
     '''
-    Queries tags/{id}/detail/
+    Queries collections/{id}/detail/
 
     Parameters:
-      id (int): Tag ID
+      id (int): Collection ID
     
     Returns:
-      Response (list): Details of queried tags
+      Response (list): Details of queried collection
     
     Examples:
         >>> import pyconceptlibraryclient
         >>> client = pyconceptlibraryclient.Client(is_public=False)
-        >>> client.tags.get_detail(1)
+        >>> client.collections.get_detail(1)
     '''
-    url = self._build_url(Path.GET_TAG_BY_ID, id=id)
+    url = self._build_url(Path.GET_COLLECTION_BY_ID, id=id)
 
     response = self._get(url)
     return response

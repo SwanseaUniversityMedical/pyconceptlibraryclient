@@ -1,155 +1,114 @@
-import api
-import utils
-import requests
+from pyconceptlibraryclient.endpoint import Endpoint
+from pyconceptlibraryclient.constants import Path
 
+class Concepts(Endpoint):
+  '''
+  Queries concepts/ endpoints
+  '''
+  
+  def __init__(self, *args, **kwargs) -> None:
+    super(Concepts, self).__init__(*args, **kwargs)
 
-class Concepts:
-    """
-    This class consists of the endpoints related to the Concepts.
-    """
+  def get(self, **kwargs) -> list | None:
+    '''
+    Queries concepts/, with optional query parameters
 
-    def __init__(self, url, auth) -> None:
-        self.urlBuilder = utils.URLBuilder(url)
-        self.auth = auth
+    Keyword Args:
+      search (string): Keyword search
+      collections (list): IDs of collections
+      tags (list): IDs of tags
+      datasources (list): IDs of datasources
+    
+    Returns:
+      Response (list): List of concepts matching query parameters
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
 
-    def get_all_concepts(self, **kwargs):
-        """
-        This function returns all the concepts.
+      >>> # Get all concepts
+      >>> client.concepts.get()
 
-        Keyword Args:
-            search (string): Optional,
-            collection_ids (list): Optional,
-            tag_ids (list): Optional,
-            show_only_my_concepts (int): Optional,
-            show_only_deleted_concepts (int): Optional,
-            show_only_validated_concepts (int): Optional,
-            brand (string): Optional,
-            author (string): Optional,
-            owner_username (string): Optional,
-            do_not_show_versions (int): Optional,
-            must_have_published_versions (int): Optional
-        Returns:
-            Response (list -> json objects): A list representing all the concepts present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_all_concepts()
-        """
-        path = api.Path.GET_ALL_CONCEPTS.value
-        payload = {k: v for k, v in kwargs.items() if v is not None}
-        response = requests.get(
-            self.urlBuilder.get_url(path), params=payload, auth=self.auth
-        )
-        utils.check_response(response)
-        return response
+      >>> # Search concepts
+      >>> client.concepts.get(search='asthma', collections=19)
+    '''
+    url = self._build_url(Path.GET_ALL_CONCEPTS)
 
-    def get_concept_detail(self, concept_id: int):
-        """
-        This function returns the concept detail based on the given concept id.
+    response = self._get(url, params=kwargs)
+    return response
 
-        Parameters:
-            concept_id (int): Concept Id to retrieve a particular `concept` object
-        Returns:
-            Response (json object): A json object representing a single concept present in the database based on passed `id`.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_concept_detail(concept_id=1)
-        """
-        path = api.Path.GET_CONCEPT_DETAIL.value.format(concept_id=concept_id)
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+  def get_versions(self, id: str) -> list | None:
+    '''
+    Queries concepts/{id}/get-versions/
 
-    def get_concept_export_codes(self, concept_id: int):
-        """
-        This function returns the concept export code list based on the given concept id.
+    Args:
+      id (str): ID of entity to query, in format C[\d+]
+    
+    Returns:
+      Response (list): Version list of queried concept
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client.concepts.get_versions('PH1')
+    '''
+    url = self._build_url(Path.GET_CONCEPT_VERSIONS, id=id)
 
-        Parameters:
-            concept_id (int): Concept Id to retrieve a particular `concept_export_code` object
-        Returns:
-            Response (json object): A json object representing a single concept export code present in the database based on passed `id`.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_concept_export_codes(concept_id=1)
-        """
-        path = api.Path.GET_CONCEPT_CODELIST.value.format(concept_id=concept_id)
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+    response = self._get(url)
+    return response
 
-    def get_concept_versions(self, concept_id: int):
-        """
-        This function returns the concept versions based on the given concept id.
+  def get_detail(self, id: str, version_id: int | None = None) -> list | None:
+    '''
+    Queries concepts/{id}/detail/ or concepts/{id}/version/{version_id}/detail if 
+    version_id is supplied
 
-        Parameters:
-            concept_id(int): Concept Id to retrieve a particular `concept_version` object
-        Returns:
-            Response (json object): A json object representing a single concept version present in the database based on passed `id`.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_concept_versions(concept_id=1)
-        """
-        path = api.Path.GET_CONCEPT_VERSIONS.value.format(concept_id=concept_id)
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+    Args:
+      id (str): ID of entity to query, in format C[\d+]
+      version_id (int): version ID of entity
+    
+    Returns:
+      Response (list): Details of queried concept
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
 
-    def get_concept_version_detail(self, concept_id: int, version_id: int):
-        """
-        This function returns the concept version detail based on the given concept id and version id.
+      >>> # Get detail of phenotype, PH1
+      >>> client.concepts.get_detail('PH1')
 
-        Parameters:
-            concept_id(int): Concept Id to retrieve a particular `concept_version_detail` object
-            version_id(int): Version Id to retrieve a particular `concept_version_detail` object
-        Returns:
-            Response (json object): A json object representing a single concept version detail present in the database based on passed `id`.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_concept_version_detail(concept_id=1, version_id=1)
-        """
-        path = api.Path.GET_CONCEPT_VERSION_DETAIL.value.format(
-            concept_id=concept_id, version_id=version_id
-        )
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+      >>> # Get detail of version 2 of phenotype, PH1
+      >>> client.concepts.get_detail('PH1', version_id=2)
+    '''
+    url = Path.GET_CONCEPT_DETAIL if version_id else Path.GET_CONCEPT_DETAIL
+    url = self._build_url(url, id=id, version_id=version_id)
 
-    def get_concept_version_export_codes(self, concept_id: int, version_id: int):
-        """
-        This function returns the concept version export codes based on the given concept id and version id.
+    response = self._get(url)
+    return response
 
-        Parameters:
-            concept_id(int): Concept Id to retrieve a particular `concept_version_export_code` object
-            version_id(int): Version Id to retrieve a particular `concept_version_export_code` object
-        Returns:
-            Response (json object): A json object representing a single concept_version_export_code present in the database based on passed `id`.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_concept_version_detail(concept_id=1, version_id=1)
-        """
-        path = api.Path.GET_CONCEPT_VERSION_CODELIST.value.format(
-            concept_id=concept_id, version_id=version_id
-        )
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+  def get_codelist(self, id: str, version_id: int | None = None) -> list | None:
+    '''
+    Queries concepts/{id}/export/codes/ or 
+    concepts/{id}/version/{version_id}/export/codes if version_id is supplied
 
+    Args:
+      id (str): ID of entity to query, in format C[\d+]
+      version_id (int): version ID of entity
+    
+    Returns:
+      Response (list): Codelist of queried concept
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
 
-def main():
-    concept = Concepts()
-    concept.get_all_concepts(search="Alcohol")
-    concept.get_all_concepts(brand="HDRUK", collection_ids=[20, 23])
-    concept.get_concept_detail(714)
-    concept.get_concept_export_codes(714)
-    concept.get_concept_versions(714)
-    concept.get_concept_version_detail(714, 8627)
-    concept.get_concept_version_export_codes(714, 8627)
+      >>> # Get codelist of phenotype, PH1
+      >>> client.concepts.get_codelist('PH1')
 
+      >>> # Get codelist of version 2 of phenotype, PH1
+      >>> client.concepts.get_codelist('PH1', version_id=2)
+    '''
+    url = Path.GET_CONCEPT_CODELIST if version_id else Path.GET_CONCEPT_CODELIST
+    url = self._build_url(url, id=id, version_id=version_id)
 
-if __name__ == "__main__":
-    main()
+    response = self._get(url)
+    return response  

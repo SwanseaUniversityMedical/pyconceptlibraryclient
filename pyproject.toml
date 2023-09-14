@@ -6,24 +6,20 @@ authors = ["SAIL Dev Team"]
 license = "GNU"
 readme = "README.md"
 packages = [
-    { include = "pyconceptlibraryclient" },
-    { include = "api" },
-    { include = "assets" },
-    { include = "test" },
-    { include = "utils" }
+    { include = "pyconceptlibraryclient" }
 ]
 
 [tool.poetry.dependencies]
-python = "3.11.4"
+python = "^3.9.0"
 requests = "^2.31.0"
 pyyaml = "^6.0"
+pandas = "^2.0.0"
 autohooks = "^23.4.0"
 autohooks-plugin-black = "^23.4.0"
 mkdocs = "^1.4.3"
 mkdocs-material = "^9.1.18"
 mkdocstrings-python = "^1.2.0"
 mkdocstrings = "^0.22.0"
-
 
 [build-system]
 requires = ["poetry-core"]

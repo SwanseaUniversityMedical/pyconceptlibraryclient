@@ -49,13 +49,14 @@ plugins:
 
 nav:
   - "Home": index.md
-  - "Collections": collections.md
-  - "Tags": tags.md
+  - "Client": client.md
+  - "Domains": domains.md
+  - "Templates": templates.md
   - "Phenotypes": phenotypes.md
   - "Concepts": concepts.md
+  - "Collections": collections.md
+  - "Tags": tags.md
   - "DataSources": datasources.md
-  - "Templates": templates.md
-  - "For Developers": for_developer.md
 
 markdown_extensions:
   - pymdownx.highlight:

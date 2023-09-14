@@ -1,336 +1,352 @@
-import api
-import utils
-import requests
-import yaml, json
+import pandas as pd
 
+from pyconceptlibraryclient.endpoint import Endpoint
+from pyconceptlibraryclient.constants import Path
+import pyconceptlibraryclient.utils as utils
 
-class Phenotype:
-    """
-    This class consists of the endpoints related to the Phenotypes.
-    """
+PHENOTYPE_IGNORED_WRITE_FIELDS = [
+  'owner', 'phenotype_id', 'phenotype_version_id',
+  'created', 'updated', 'template'
+]
+PHENOTYPE_IGNORED_READ_FIELDS = [
+  'versions', 'status', 'is_deleted', 'owner_access', 'coding_system',
+  'publish_status', 'created', 'updated'
+]
 
-    def __init__(self, url, auth) -> None:
-        self.urlBuilder = utils.URLBuilder(url)
-        self.auth = auth
+class Phenotypes(Endpoint):
+  '''
+  Queries phenotypes/ endpoints
+  '''
+  
+  def __init__(self, *args, **kwargs) -> None:
+    super(Phenotypes, self).__init__(*args, **kwargs)
 
-    def get_phenotypes(self, **kwargs):
-        """
-        This function returns all the phenotypes.
+  def get(self, **kwargs) -> list | None:
+    '''
+    Queries phenotypes/, with optional query parameters
 
-        Keyword Args:
-            search (string): Optional,
-            collection_ids (list): Optional,
-            tag_ids (list): Optional,
-            selected_phenotype_types (list): Optional,
-            show_only_my_phenotypes (int): Optional,
-            show_only_deleted_phenotypes (int): Optional,
-            show_only_validated_phenotypes (int): Optional,
-            brand (string): Optional,
-            author (string): Optional,
-            owner_username (string): Optional,
-            do_not_show_versions (int): Optional,
-            must_have_published_versions (int): Optional
-        Returns:
-            Response (list -> json objects): A list representing all the phenotypes present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_phenotypes()
-        """
-        path = api.Path.GET_ALL_PHENOTYPES.value
-        payload = {k: v for k, v in kwargs.items() if v is not None}
-        response = requests.get(
-            self.urlBuilder.get_url(path), params=payload, auth=self.auth
-        )
-        utils.check_response(response)
-        return response
+    Keyword Args:
+      search (string): Keyword search
+      collections (list): IDs of collections
+      tags (list): IDs of tags
+      datasources (list): IDs of datasources
+    
+    Returns:
+      Response (list): List of phenotypes matching query parameters
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
 
-    def get_phenotype_detail(self, id: str, **kwargs):
-        """
-        This function returns the phenotype detail based on the given phenotype id.
+      >>> # Get all phenotypes
+      >>> client.phenotypes.get()
 
-        Parameters:
-            id (string): Phenotype Id to retrieve a particular phenotype from the database.
-        Keyword Args:
-            search (string): Optional,
-            collection_ids (list): Optional,
-            tag_ids (list): Optional,
-            selected_phenotype_types (list): Optional,
-            show_only_my_phenotypes (int): Optional,
-            show_only_deleted_phenotypes (int): Optional,
-            show_only_validated_phenotypes (int): Optional,
-            brand (string): Optional,
-            author (string): Optional,
-            owner_username (string): Optional,
-            do_not_show_versions (int): Optional,
-            must_have_published_versions (int): Optional
-        Returns:
-            Response (list -> json objects): A list representing all the phenotypes present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_phenotype_detail(id=1)
-        """
-        path = api.Path.GET_PHENOTYPE_DETAIL.value.format(id=id)
-        payload = {k: v for k, v in kwargs.items() if v is not None}
-        response = requests.get(
-            self.urlBuilder.get_url(path), params=payload, auth=self.auth
-        )
-        utils.check_response(response)
-        return response
+      >>> # Search phenotypes
+      >>> client.phenotypes.get(search='asthma', collections=19)
+    '''
+    url = self._build_url(Path.GET_ALL_PHENOTYPES)
 
-    def get_phenotype_versions(self, id: str):
-        """
-        This function returns all the phenotype versions.
+    response = self._get(url, params=kwargs)
+    return response
 
-        Parameters:
-            id (string): Phenotype Id to retrieve a particular phenotype from the database.
-        Returns:
-            Response (json object): A json object representing a single phenotype present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_phenotype_versions(id=1)
-        """
-        path = api.Path.GET_PHENOTYPE_VERSIONS.value.format(id=id)
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+  def get_versions(self, id: str) -> list | None:
+    '''
+    Queries phenotypes/{id}/get-versions/
 
-    def get_phenotype_version_detail(self, id: str, version_id: int):
-        """
-        This function returns the phenotype version detail based on the given phenotype id and the version id.
+    Args:
+      id (str): ID of entity to query, in format PH[\d+]
+    
+    Returns:
+      Response (list): Version list of queried phenotype
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client.phenotypes.get_versions('PH1')
+    '''
+    url = self._build_url(Path.GET_PHENOTYPE_VERSIONS, id=id)
 
-        Parameters:
-            id (string): Phenotype Id to retrieve a particular phenotype from the database.
-            version_id (int): Version Id to retrieve a particular phenotype from the database.
-        Returns:
-            Response (json object): A json object representing a single phenotype_version_detail present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_phenotype_version_detail(id=1, version_id=1)
-        """
-        path = api.Path.GET_PHENOTYPE_VERSION_DETAIL.value.format(
-            id=id, version_id=version_id
-        )
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+    response = self._get(url)
+    return response
 
-    def get_phenotype_field(self, id: str, field: str):
-        """
-        This function returns the field based on the given phenotype id.
+  def get_detail(self, id: str, version_id: int | None = None) -> list | None:
+    '''
+    Queries phenotypes/{id}/detail/ or phenotypes/{id}/version/{version_id}/detail if 
+    version_id is supplied
 
-        Parameters:
-            id (string): Phenotype Id to retrieve a particular phenotype from the database.
-        Returns:
-            Response (list -> json objects): A list representing a phenotype codes present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_phenotype_code_list(id=1, field="<enter your field here>")
-        """
-        path = api.Path.GET_PHENOTYPE_FIELD.value.format(id=id, field=field)
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+    Args:
+      id (str): ID of entity to query, in format PH[\d+]
+      version_id (int): version ID of entity
+    
+    Returns:
+      Response (list): Details of queried phenotype
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
 
-    def get_phenotype_field_by_version(self, id: str, version_id: int, field: str):
-        """
-        This function returns the field based on the given phenotype id and version id.
+      >>> # Get detail of phenotype, PH1
+      >>> client.phenotypes.get_detail('PH1')
 
-        Parameters:
-            id (string): Phenotype Id to retrieve a particular phenotype from the database.
-            version_id (int): Version Id to retrieve a particular phenotype from the database.
-        Returns:
-            Response (list -> json objects): A list representing a phenotype codes list by version, present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.concepts.get_phenotype_code_list(id=1, version_id=2, field="<enter your field>")
-        """
-        path = api.Path.GET_PHENOTYPE_VERSION_FIELD.value.format(
-            id=id, version_id=version_id, field=field
-        )
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+      >>> # Get detail of version 2 of phenotype, PH1
+      >>> client.phenotypes.get_detail('PH1', version_id=2)
+    '''
+    url = Path.GET_PHENOTYPE_DETAIL_VERSION if version_id else Path.GET_PHENOTYPE_DETAIL
+    url = self._build_url(url, id=id, version_id=version_id)
 
-    def save_phenotype_definition(self, id: str, version_id=None):
-        """
-        Description TODO
-        """
-        phenotype_data = None
-        if version_id is None:
-            phenotype_data = self.get_phenotype_detail(id)
+    response = self._get(url)
+    return response
+
+  def get_codelist(self, id: str, version_id: int | None = None) -> list | None:
+    '''
+    Queries phenotypes/{id}/export/codes/ or 
+    phenotypes/{id}/version/{version_id}/export/codes if version_id is supplied
+
+    Args:
+      id (str): ID of entity to query, in format PH[\d+]
+      version_id (int): version ID of entity
+    
+    Returns:
+      Response (list): Codelist of queried phenotype
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
+
+      >>> # Get codelist of phenotype, PH1
+      >>> client.phenotypes.get_codelist('PH1')
+
+      >>> # Get codelist of version 2 of phenotype, PH1
+      >>> client.phenotypes.get_codelist('PH1', version_id=2)
+    '''
+    url = Path.GET_PHENOTYPE_CODELIST_VERSION if version_id else Path.GET_PHENOTYPE_CODELIST
+    url = self._build_url(url, id=id, version_id=version_id)
+
+    response = self._get(url)
+    return response  
+
+  def save_to_file(self, path: str, id: str, version_id: int | None = None) -> None:
+    '''
+    Saves the YAML definition of the queried phenotype to file
+
+    Args:
+      path (str): Location to save the YAML file
+      id (str): ID of entity to query, in format PH[\d+]
+      version_id (int): version ID of entity
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
+
+      >>> # Get codelist of phenotype, PH1
+      >>> client.phenotypes.save_to_file('./path/to/file.yaml', 'PH1')
+
+      >>> # Get codelist of version 2 of phenotype, PH1
+      >>> client.phenotypes.save_to_file('./path/to/file.yaml', 'PH1', version_id=2)
+    '''
+    phenotype_data = self.get_detail(id=id, version_id=version_id)
+    phenotype_data = self.__format_for_download(phenotype_data)
+
+    utils.write_to_yaml_file(path, phenotype_data)
+  
+  def create(self, path: str) -> list | None:
+    '''
+    Uploads the specified phenotype definition file to the ConceptLibrary and creates
+    a new phenotype
+
+    Args:
+      path (str): Location where the definition file is saved on your local machine
+    
+    Returns:
+      Response (list): Details of the newly created phenotype
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client.phenotypes.create('./path/to/file.yaml')
+    '''
+    data = utils.read_from_yaml_file(path)
+    data = self.__format_for_upload(data)
+
+    url = self._build_url(Path.CREATE_PHENOTYPE)
+    response = self._post(url, data=data)
+    response = response.get('entity')
+
+    self.save_to_file(path, response.get('id'), version_id=response.get('version_id'))
+
+    return response
+  
+  def update(self, path: str) -> list | None:
+    '''
+    Uses the specified phenotype definition file to update an already existing phenotype
+
+    Args:
+      path (str): Location where the definition file is saved on your local machine
+    
+    Returns:
+      Response (list): Details of the updated phenotype
+    
+    Examples:
+      >>> from pyconceptlibraryclient import Client
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client.phenotypes.create('./path/to/file.yaml')
+    '''
+    data = utils.read_from_yaml_file(path)
+    data = self.__format_for_upload(data, is_update=True)
+
+    url = self._build_url(Path.UPDATE_PHENOTYPE)
+    response = self._put(url, data=data)
+    response = response.get('entity')
+
+    self.save_to_file(path, response.get('id'), version_id=response.get('version_id'))
+
+    return response
+
+  def __format_for_upload(self, data: list | None, is_update: bool = False) -> list | None:
+    '''
+    
+    '''
+    result = {
+      'data': data,
+      'template': {
+        'id': data['template']['id'],
+        'version': data['template']['id']
+      }
+    }
+    if is_update:
+      result['entity'] = {
+        'id': result['data']['phenotype_id']
+      }
+
+    if 'concept_information' in result['data'].keys():
+      result['data']['concept_information'] = self.__format_concepts_for_upload(
+        result['data']['concept_information']
+      )
+
+    if 'publications' in result['data'].keys():
+      result['data']['publications'] = utils.try_parse_doi(result['data']['publications'])
+
+    result['data'] = {k: v for k, v in result['data'].items() if k not in PHENOTYPE_IGNORED_WRITE_FIELDS}
+
+    return result
+
+  def __format_concepts_for_upload(self, data: list | None) -> list:
+    '''
+    
+    '''
+    result = []
+    for concept in data:
+      concept_type = concept['type']
+      if concept_type == 'existing_concept':
+        result.append({
+          'name': concept['name'],
+          'concept_id': concept['concept_id'],
+          'concept_version_id': concept['concept_version_id'],
+          'internal_type': concept_type
+        })
+        continue
+
+      if concept_type == 'csv':
+        new_concept = {
+          'details': {
+            'name': concept['name'],
+            'coding_system': concept['coding_system'],
+            'internal_type': concept['type']
+          },
+          'components': []
+        }
+
+        if 'concept_id' in concept and 'concept_version_id' in concept:
+          new_concept |= {
+            'concept_id': concept['concept_id'],
+            'concept_version_id': concept['concept_version_id'],
+            'is_dirty': True
+          }
         else:
-            phenotype_data = self.get_phenotype_version_detail(id, version_id).json()[0]
+          new_concept['is_new'] = True
+        
+        new_concept['components'].append(self.__build_concept_components(concept, new_concept))
 
-        result = {}
-        for field_name in phenotype_data:
-            if field_name not in utils.constants.API_IGNORE_TEMPLATE_FIELDS:
-                field_value = phenotype_data[field_name]
-                if utils.should_write_field(field_value):
-                    if isinstance(field_value, dict):
-                        if "id" in field_value and "version_id" in field_value:
-                            result[field_name] = {
-                                "id": field_value["id"],
-                                "version_id": field_value["version_id"],
-                            }
-                        else:
-                            result[field_name] = field_value
-                    else:
-                        if field_name == "concept_information":
-                            result_concepts = []
-                            for concept in range(len(field_value)):
-                                concept_data = {
-                                    field_value[concept]["concept_name"]: {
-                                        "type": "existing_concept",
-                                        "concept_id": field_value[concept][
-                                            "concept_id"
-                                        ],
-                                        "concept_version_id": field_value[concept][
-                                            "concept_version_id"
-                                        ],
-                                    }
-                                }
-                                result_concepts.append(concept_data)
-                            result[field_name] = result_concepts
-                        elif isinstance(field_value, str | int):
-                            result[field_name] = field_value
-                        elif isinstance(field_value, list):
-                            if len(field_value) > 1:
-                                result_values = []
-                                for item in range(len(field_value)):
-                                    result_values.append(field_value[item]["value"])
-                                result[field_name] = result_values
-                            elif field_name != "publications":
-                                result[field_name] = field_value[0]["value"]
-                            else:
-                                result[field_name] = field_value[0]
-        dest_file_picker = utils.SaveFile(result)
-        dest_file_picker.save_file()
+        result.append(new_concept)
+        continue
 
-    def create_phenotype(self, data):
-        """
-        This function creates a phenotype defined in the form of json which is passed as an argument
-        """
-        path = api.Path.CREATE_PHENOTYPE.value
-        response = requests.post(
-            self.urlBuilder.get_url(path),
-            auth=self.auth,
-            data=json.dumps(data),
-        )
-        utils.check_response(response)
-        return response
+    return result
+  
+  def __build_concept_components(self, concept: dict, new_concept: dict) -> dict:
+    '''
+    
+    '''
+    codelist = pd.read_csv(concept['filepath'])
+    code_column, description_column = concept['code_column'], concept['description_column']
+    has_description = description_column in codelist.columns
+    
+    new_component = {
+      'is_new': True,
+      'name': 'CODES - %s' % new_concept['details']['name'],
+      'logical_type': 'INCLUDE',
+      'source_type': 'FILE_IMPORT',
+      'codes': []
+    }
+    for _, row in codelist.iterrows():
+      new_component['codes'].append({
+        'code': row[code_column],
+        'description': '' if not has_description else row[description_column]
+      })
 
-    def update_phenotype(self, data):
-        """
-        This function creates a phenotype defined in the form of json which is passed as an argument
-        """
-        path = api.Path.UPDATE_PHENOTYPE.value
-        response = requests.put(
-            self.urlBuilder.get_url(path),
-            auth=self.auth,
-            data=json.dumps(data),
-        )
-        utils.check_response(response)
-        return response
+    return new_component
 
-    def upload_phenotype(self, is_update: bool):
-        """
-        This function creates/updates a phenotype defined in the form of json which is passed as an argument depending upon
-        the parameter 'is_update' that is passed.
+  def __format_for_download(self, data: dict | None) -> list | None:
+    '''
+    
+    '''
+    result = {}
+    for key, value in data[0].items():
+      if not value:
+        continue
 
-        Parameters:
-            is_update (bool): If it is True, then we hit the update_phenotype endpoint otherwise, we hit the create_endpoint endpoint.
-        Returns:
-            Response (json object): Consisting of `data` and `phenotype_response`
-        """
-        file_picker = utils.OpenFile()
-        dir = file_picker.upload_file()
-        data = utils.yaml_to_json(dir)
-        if data:
-            modified_data = utils.format_phenotype(data, is_update)
-            if is_update:
-                to_be_updated_phenotype = json.loads(
-                    utils.insert_empty_fields(modified_data)
-                )
-                to_be_updated_phenotype = modified_data
-                if to_be_updated_phenotype["data"]["template"]:
-                    template_data = utils.format_template(to_be_updated_phenotype)
-                    del to_be_updated_phenotype["data"]["template"]
-                    to_be_updated_phenotype["template"] = template_data
-                else:
-                    raise ValueError("Template id and version are missing")
-                if to_be_updated_phenotype["data"]["concept_information"]:
-                    to_be_updated_phenotype["data"][
-                        "concept_information"
-                    ] = utils.format_concept(
-                        to_be_updated_phenotype["data"]["concept_information"]
-                    )
-                response = self.update_phenotype(to_be_updated_phenotype)
-                phenotype_response_json = response.json()
-                result = {
-                    "data": json.loads(data)["data"],
-                    "entity": [{"id": phenotype_response_json["entity"]["id"]}],
-                }
-                yaml.dump(
-                    result,
-                    open(
-                        utils.constants.PATH_FOR_STORING_FILE_AFTER_UPDATE_PHENOTYPE
-                        + f"{phenotype_response_json['entity']['id']}-definition-output-file.yaml",
-                        "w",
-                    ),
-                    default_flow_style=False,
-                    sort_keys=False,
-                )
-                yaml.dump(
-                    result,
-                    open("./assets/definition_file_update.yaml", "w"),
-                    default_flow_style=False,
-                    sort_keys=False,
-                )
-            else:
-                new_phenotype = json.loads(utils.insert_empty_fields(modified_data))
-                new_phenotype = {"data": modified_data}
-                if new_phenotype["data"]["template"]:
-                    template_data = utils.format_template(new_phenotype)
-                    del new_phenotype["data"]["template"]
-                    new_phenotype["template"] = template_data
-                else:
-                    raise ValueError("Template id and version are missing")
-                if new_phenotype["data"]["concept_information"]:
-                    new_phenotype["data"]["concept_information"] = utils.format_concept(
-                        new_phenotype["data"]["concept_information"]
-                    )
-                response = self.create_phenotype(new_phenotype)
-                phenotype_response_json = response.json()
-                result = {"data": json.loads(data), "response": phenotype_response_json}
-                dest_file_picker = utils.SaveFile(result)
-                dest_file_picker.save_file()
-            return result
-        else:
-            raise ValueError(
-                "File is invalid, please check the file location and filetype (supports .yaml files only)"
-            )
+      if key in PHENOTYPE_IGNORED_READ_FIELDS:
+        continue
 
+      if not isinstance(value, list) and not isinstance(value, dict):
+        result[key] = value
+        continue
+    
+      if key == 'concept_information':
+        result[key] = []
+        for concept in value:
+          new_concept = {
+            'name': concept['concept_name'],
+            'type': 'existing_concept',
+            'concept_id': concept['concept_id'],
+            'concept_version_id': concept['concept_version_id']
+          }
 
-def main():
-    phenotype = Phenotype(is_public=False)
-    # phenotype.get_phenotypes()
-    # phenotype.get_phenotypes(search="Alcohol")
-    # phenotype.get_phenotype_detail("PH1", search="Alcohol")
-    # phenotype.get_phenotype_versions("PH1")
-    # phenotype.get_phenotype_version_detail("PH1", 3)
-    # phenotype.get_phenotype_field("PH1", "coding_system")
-    # phenotype.get_phenotype_code_list_by_version("PH1", 2)
-    # phenotype.save_phenotype_definition("PH1", 2)
-    # phenotype.save_phenotype_definition("PH2", "./assets/gen", 4)
-    # phenotype.save_phenotype_definition("PH3", "./assets/gen", 6)
-    # phenotype.upload_phenotype(is_update=False)
+          result[key].append(new_concept)
+        continue
 
+      if isinstance(value, list):
+        fields = {k: [v[k] for v in value] for k in value[0]}
+        field_keys = fields.keys()
 
-if __name__ == "__main__":
-    main()
+        if 'value' in field_keys:
+          new_value = fields['value']
+          if len(new_value) == 1:
+            new_value = fields['value'][0]
+
+          result[key] = new_value
+          continue
+
+        if 'doi' in field_keys:
+          result[key] = fields['details']
+          continue
+
+      if isinstance(value, dict):
+        field_keys = value.keys()
+        if 'id' in field_keys and 'version_id' in field_keys:
+          result[key] = {
+            'id': value['id'],
+            'version_id': value['version_id']
+          }
+        continue
+
+    return result

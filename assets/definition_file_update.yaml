@@ -1,38 +1,33 @@
-data:
-  name: COVID-19 infection
-  author: BHF CVD COVID UK Consortium
-  type: '2'
-  data_sources:
-  - 1
-  - 2
-  - 3
-  - 4
-  sex: '3'
-  coding_system:
-  - 9
-  - 4
-  collections:
-  - 20
-  - 18
-  definition: Update PH1576
-  concept_information:
-  - COVID-19 infection - Primary Care:
-    - type: existing_concept
-    - concept_id: 714
-    - concept_history_id: 2567
-  - COVID-19 infection - Hospitalizations:
-    - type: existing_concept
-    - concept_id: 715
-    - concept_history_id: 2569
-  world_access: 1
-  group_access: 1
-  created: '2021-10-06T15:58:48.523066Z'
-  updated: '2021-10-06T15:58:48.523092Z'
-  owner: ieuan.scanlon
-  template:
-  - id: 1
-  - version_id: 1
-  phenotype_version_id: 2
-  phenotype_id: PH1
-entity:
-- id: PH1576
+phenotype_id: PH1
+phenotype_version_id: 2
+name: COVID-19 infection
+author: BHF CVD COVID UK Consortium
+type: '2'
+data_sources:
+- 1
+- 2
+- 3
+- 4
+sex: '3'
+coding_system:
+- 9
+- 4
+collections:
+- 20
+- 18
+definition: Update PH1576
+concept_information:
+- name: COVID-19 infection - Primary Care:
+  type: existing_concept
+  concept_id: 714
+  concept_history_id: 2567
+- name: COVID-19 infection - Hospitalizations:
+  type: existing_concept
+  concept_id: 715
+  concept_history_id: 2569
+world_access: 1
+group_access: 1
+owner: ieuan.scanlon
+template:
+- id: 1
+- version_id: 1

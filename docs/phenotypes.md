@@ -1,13 +1,12 @@
 # Phenotypes
 
-::: pyconceptlibraryclient.phenotypes.Phenotype
+::: pyconceptlibraryclient.phenotypes.Phenotypes
     options:
         members:
-            - get_phenotypes
-            - get_phenotype_detail
-            - get_phenotype_versions
-            - get_phenotype_version_detail
-            - get_phenotype_code_list
-            - get_phenotype_code_list_by_version
-            - save_phenotype_definition
-            - upload_phenotype
+            - get
+            - get_versions
+            - get_detail
+            - get_codelist
+            - save_to_file
+            - create
+            - update

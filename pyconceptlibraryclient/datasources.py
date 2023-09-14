@@ -1,47 +1,47 @@
-import api
-import utils
-import requests
+from pyconceptlibraryclient.endpoint import Endpoint
+from pyconceptlibraryclient.constants import Path
 
+class Datasources(Endpoint):
+  '''
+  Queries datasources/ endpoints
+  '''
+  
+  def __init__(self, *args, **kwargs) -> None:
+    super(Datasources, self).__init__(*args, **kwargs)
 
-class DataSources:
-    """
-    This class consists of the endpoints related to the Data Sources.
-    """
+  def get(self) -> list | None:
+    '''
+    Queries datasources/
 
-    def __init__(self, url, auth) -> None:
-        self.urlBuilder = utils.URLBuilder(url)
-        self.auth = auth
+    Returns:
+      Response (list): A list containing all the datasources present in the database
+    
+    Examples:
+      >>> import pyconceptlibraryclient
+      >>> client = pyconceptlibraryclient.Client(is_public=False)
+      >>> client.datasources.get()
+    '''
+    url = self._build_url(Path.GET_ALL_DATASOURCES)
 
-    def get_all(self):
-        """
-        This function returns all the datasources.
+    response = self._get(url)
+    return response
 
-        Returns:
-            Response (list -> json objects): A list representing all the datasources present in the database.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.datasources.get_all()
-        """
-        path = api.Path.GET_ALL_DATASOURCES.value
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+  def get_detail(self, id: int) -> list | None:
+    '''
+    Queries datasources/{id}/detail/
 
-    def get_one_detail(self, id: int):
-        """
-        This function returns the datasource info based on the given datasource id.
+    Parameters:
+      id (int): Datasource ID
+    
+    Returns:
+      Response (list): Details of queried datasource
+    
+    Examples:
+        >>> import pyconceptlibraryclient
+        >>> client = pyconceptlibraryclient.Client(is_public=False)
+        >>> client.datasources.get_detail(1)
+    '''
+    url = self._build_url(Path.GET_DATASOURCE_BY_ID, id=id)
 
-        Parameters:
-            id (int): Datasource Id to retrieve a particular `datasource` object
-        Returns:
-            Response (json object): A json object representing single datasource present in the database based on passed `id`.
-        Examples:
-            >>> import pyconceptlibraryclient
-            >>> client = pyconceptlibraryclient.Client(is_public=False)
-            >>> client.datasources.get_one_detail(1)
-        """
-        path = api.Path.GET_DATASOURCE_BY_ID.value.format(id=id)
-        response = requests.get(self.urlBuilder.get_url(path), auth=self.auth)
-        utils.check_response(response)
-        return response
+    response = self._get(url)
+    return response
