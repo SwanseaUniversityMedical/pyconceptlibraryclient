@@ -1,5 +1,5 @@
 from pyconceptlibraryclient.endpoint import Endpoint
-from pyconceptlibraryclient.constants import Path
+from pyconceptlibraryclient.constants import PATH
 
 class Concepts(Endpoint):
   '''
@@ -24,7 +24,7 @@ class Concepts(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
 
       >>> # Get all concepts
       >>> client.concepts.get()
@@ -32,7 +32,7 @@ class Concepts(Endpoint):
       >>> # Search concepts
       >>> client.concepts.get(search='asthma', collections=19)
     '''
-    url = self._build_url(Path.GET_ALL_CONCEPTS)
+    url = self._build_url(PATH.GET_ALL_CONCEPTS)
 
     response = self._get(url, params=kwargs)
     return response
@@ -49,10 +49,10 @@ class Concepts(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
       >>> client.concepts.get_versions('PH1')
     '''
-    url = self._build_url(Path.GET_CONCEPT_VERSIONS, id=id)
+    url = self._build_url(PATH.GET_CONCEPT_VERSIONS, id=id)
 
     response = self._get(url)
     return response
@@ -71,7 +71,7 @@ class Concepts(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
 
       >>> # Get detail of phenotype, PH1
       >>> client.concepts.get_detail('PH1')
@@ -79,7 +79,7 @@ class Concepts(Endpoint):
       >>> # Get detail of version 2 of phenotype, PH1
       >>> client.concepts.get_detail('PH1', version_id=2)
     '''
-    url = Path.GET_CONCEPT_DETAIL if version_id else Path.GET_CONCEPT_DETAIL
+    url = PATH.GET_CONCEPT_DETAIL if version_id else PATH.GET_CONCEPT_DETAIL
     url = self._build_url(url, id=id, version_id=version_id)
 
     response = self._get(url)
@@ -99,7 +99,7 @@ class Concepts(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
 
       >>> # Get codelist of phenotype, PH1
       >>> client.concepts.get_codelist('PH1')
@@ -107,7 +107,7 @@ class Concepts(Endpoint):
       >>> # Get codelist of version 2 of phenotype, PH1
       >>> client.concepts.get_codelist('PH1', version_id=2)
     '''
-    url = Path.GET_CONCEPT_CODELIST if version_id else Path.GET_CONCEPT_CODELIST
+    url = PATH.GET_CONCEPT_CODELIST if version_id else PATH.GET_CONCEPT_CODELIST
     url = self._build_url(url, id=id, version_id=version_id)
 
     response = self._get(url)

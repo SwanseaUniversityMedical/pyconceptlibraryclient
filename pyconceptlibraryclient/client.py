@@ -19,13 +19,13 @@ class Client():
   ### Public API
   ``` python
   from pyconceptlibraryclient import Client
-  client = Client(is_public=True)
+  client = Client(public=True)
   ```
 
   ### Authenticated API (terminal requests credentials)
   ``` python
   from pyconceptlibraryclient import Client
-  client = Client(is_public=False)
+  client = Client(public=False)
   ```
 
   ### Authenticated API (providing credentials)
@@ -37,14 +37,14 @@ class Client():
   ## Providing a different URL
   ### Using built-in domains
   ``` python
-  from pyconceptlibraryclient import Client, Domains
-  client = Client(is_public=False, url=Domains.HDRUK)
+  from pyconceptlibraryclient import Client, DOMAINS
+  client = Client(public=False, url=DOMAINS.HDRUK)
   ```
   
   ### Using a custom URL
   ``` python
   from pyconceptlibraryclient import Client
-  client = Client(is_public=False, url='my-custom-url')
+  client = Client(public=False, url='my-custom-url')
   ```
   '''
 
@@ -52,21 +52,22 @@ class Client():
       self, 
       username: str = None,
       password: str = None,
-      is_public: bool = False,
-      url: constants.Domains | str = constants.DEFAULT_URL
+      public: bool = False,
+      url: constants.DOMAINS | str = constants.DEFAULT_URL
     ) -> None:
-    if isinstance(url, constants.Domains):
+    if isinstance(url, constants.DOMAINS):
       url = url.value
     self.url = url or input('Connection URL: ')
     self.url = self.url if self.url[-1] == '/' else self.url + '/'
 
-    if is_public:
+    if public:
+      self.__auth = None
       return
 
     username = username or input('Username: ')
     password = password or getpass.getpass('Password: ')
 
-    self._auth = HTTPBasicAuth(
+    self.__auth = HTTPBasicAuth(
       username=username,
       password=password
     )
@@ -77,7 +78,7 @@ class Client():
       Entrypoint for templates through the client instance
     '''
     if not getattr(self, '__templates', None):
-      setattr(self, '__templates', Templates(self.url, self._auth))
+      setattr(self, '__templates', Templates(self.url, self.__auth))
     return getattr(self, '__templates')
 
   @property
@@ -86,7 +87,7 @@ class Client():
       Entrypoint for phenotypes through the client instance
     '''
     if not getattr(self, '__phenotypes', None):
-      setattr(self, '__phenotypes', Phenotypes(self.url, self._auth))
+      setattr(self, '__phenotypes', Phenotypes(self.url, self.__auth))
     return getattr(self, '__phenotypes')
 
   @property
@@ -95,7 +96,7 @@ class Client():
       Entrypoint for concepts through the client instance
     '''
     if not getattr(self, '__concepts', None):
-      setattr(self, '__concepts', Concepts(self.url, self._auth))
+      setattr(self, '__concepts', Concepts(self.url, self.__auth))
     return getattr(self, '__concepts')
 
   @property
@@ -104,7 +105,7 @@ class Client():
       Entrypoint for collections through the client instance
     '''
     if not getattr(self, '__collections', None):
-      setattr(self, '__collections', Collections(self.url, self._auth))
+      setattr(self, '__collections', Collections(self.url, self.__auth))
     return getattr(self, '__collections')
 
   @property
@@ -113,7 +114,7 @@ class Client():
       Entrypoint for tags through the client instance
     '''
     if not getattr(self, '__tags', None):
-      setattr(self, '__tags', Tags(self.url, self._auth))
+      setattr(self, '__tags', Tags(self.url, self.__auth))
     return getattr(self, '__tags')
 
   @property
@@ -122,5 +123,5 @@ class Client():
       Entrypoint for datasources through the client instance
     '''
     if not getattr(self, '__datasources', None):
-      setattr(self, '__datasources', Datasources(self.url, self._auth))
+      setattr(self, '__datasources', Datasources(self.url, self.__auth))
     return getattr(self, '__datasources')

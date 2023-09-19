@@ -1,5 +1,5 @@
 from pyconceptlibraryclient.endpoint import Endpoint
-from pyconceptlibraryclient.constants import Path
+from pyconceptlibraryclient.constants import PATH
 
 class Tags(Endpoint):
   '''
@@ -18,10 +18,10 @@ class Tags(Endpoint):
     
     Examples:
       >>> import pyconceptlibraryclient
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
       >>> client.tags.get()
     '''
-    url = self._build_url(Path.GET_ALL_TAGS)
+    url = self._build_url(PATH.GET_ALL_TAGS)
 
     response = self._get(url)
     return response
@@ -38,10 +38,10 @@ class Tags(Endpoint):
     
     Examples:
         >>> import pyconceptlibraryclient
-        >>> client = Client(is_public=False)
+        >>> client = Client(public=False)
         >>> client.tags.get_detail(1)
     '''
-    url = self._build_url(Path.GET_TAG_BY_ID, id=id)
+    url = self._build_url(PATH.GET_TAG_BY_ID, id=id)
 
     response = self._get(url)
     return response

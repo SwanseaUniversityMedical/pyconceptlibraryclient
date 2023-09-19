@@ -11,7 +11,7 @@ class Endpoint:
 
   def __init__(self, url: str, auth: HTTPBasicAuth = None) -> None:
     self._url = url
-    self._auth = auth
+    self.__auth = auth
 
   def _get(self, url: str, params: dict = None) -> list | None:
     '''
@@ -27,7 +27,7 @@ class Endpoint:
     response = requests.get(
       url, 
       params=params,
-      auth=self._auth
+      auth=self.__auth
     )
     
     return self.__check_response(response)
@@ -46,7 +46,7 @@ class Endpoint:
     response = requests.post(
       url,
       data=json.dumps(data),
-      auth=self._auth
+      auth=self.__auth
     )
     
     return self.__check_response(response)
@@ -65,7 +65,7 @@ class Endpoint:
     response = requests.put(
       url,
       data=json.dumps(data),
-      auth=self._auth
+      auth=self.__auth
     )
     
     return self.__check_response(response)

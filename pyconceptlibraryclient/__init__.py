@@ -1,2 +1,2 @@
 from pyconceptlibraryclient.client import Client
-from pyconceptlibraryclient.constants import Domains
+from pyconceptlibraryclient.constants import DOMAINS

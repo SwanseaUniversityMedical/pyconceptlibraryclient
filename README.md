@@ -21,10 +21,10 @@ The package provides a function to connect to the Concept Library API and multip
 from pyconceptlibraryclient import Client
 
 # Non-authenticated API
-client = Client(is_public=True)
+client = Client(public=True)
 
 # Authenticated API (terminal requests credentials)
-client = Client(is_public=False)
+client = Client(public=False)
 
 # Authenticated API (user providing credentials)
 client = Client(username='my-username', password='password)
@@ -32,42 +32,42 @@ client = Client(username='my-username', password='password)
 
 The `url` parameter can be used to specify a different version of the ConceptLibrary API
 ``` python
-from pyconceptlibraryclient import Client, Domains
+from pyconceptlibraryclient import Client, DOMAINS
 
-# Using common domains stored in pyconceptlibrary.Domains
+# Using common domains stored in pyconceptlibrary.DOMAINS
 ## SAIL (conceptlibrary.saildatabank.com/)
 client = Client(
-  is_public=True,
-  url=Domains.SAIL
+  public=True,
+  url=DOMAINS.SAIL
 )
 
 ## HDRUK (phenotypes.healthdatagateway.org/)
 client = Client(
-  is_public=True,
-  url=Domains.HDRUK
+  public=True,
+  url=DOMAINS.HDRUK
 )
 
 ## ADP (conceptlibrary.saildatabank.com/ADP/)
 client = Client(
-  is_public=True,
-  url=Domains.ADP
+  public=True,
+  url=DOMAINS.ADP
 )
 
 ## Gateway (conceptlibrary.serp.ac.uk/)
 client = Client(
-  is_public=True,
-  url=Domains.DEMO
+  public=True,
+  url=DOMAINS.DEMO
 )
 
 ## Demo site (conceptlibrary.demo-dev.saildatabank.com/)
 client = Client(
-  is_public=True,
-  url=Domains.DEMO
+  public=True,
+  url=DOMAINS.DEMO
 )
 
 # Custom URL
 client = Client(
-  is_public=True,
+  public=True,
   url='my-custom-url.com/'
 )
 ```
@@ -119,10 +119,10 @@ phenotype_codelist = client.phenotypes.get_codelist('PH1', version_id=2)
 #### Downloading a definition file
 ``` python
 # Downloading a phenotype's definition file
-client.phenotypes.save_to_file('./path/to/file.yaml', 'PH1')
+client.phenotypes.save_definition_file('./path/to/file.yaml', 'PH1')
 
 # Downloading a specific version of a phenotype's definition file
-client.phenotypes.save_to_file('./path/to/file.yaml', 'PH1', version_id=2)
+client.phenotypes.save_definition_file('./path/to/file.yaml', 'PH1', version_id=2)
 ```
 
 #### Creating/Updating

@@ -1,7 +1,7 @@
 import pandas as pd
 
 from pyconceptlibraryclient.endpoint import Endpoint
-from pyconceptlibraryclient.constants import Path
+from pyconceptlibraryclient.constants import PATH
 import pyconceptlibraryclient.utils as utils
 
 PHENOTYPE_IGNORED_WRITE_FIELDS = [
@@ -36,7 +36,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
 
       >>> # Get all phenotypes
       >>> client.phenotypes.get()
@@ -44,7 +44,7 @@ class Phenotypes(Endpoint):
       >>> # Search phenotypes
       >>> client.phenotypes.get(search='asthma', collections=19)
     '''
-    url = self._build_url(Path.GET_ALL_PHENOTYPES)
+    url = self._build_url(PATH.GET_ALL_PHENOTYPES)
 
     response = self._get(url, params=kwargs)
     return response
@@ -61,10 +61,10 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
       >>> client.phenotypes.get_versions('PH1')
     '''
-    url = self._build_url(Path.GET_PHENOTYPE_VERSIONS, id=id)
+    url = self._build_url(PATH.GET_PHENOTYPE_VERSIONS, id=id)
 
     response = self._get(url)
     return response
@@ -83,7 +83,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
 
       >>> # Get detail of phenotype, PH1
       >>> client.phenotypes.get_detail('PH1')
@@ -91,7 +91,7 @@ class Phenotypes(Endpoint):
       >>> # Get detail of version 2 of phenotype, PH1
       >>> client.phenotypes.get_detail('PH1', version_id=2)
     '''
-    url = Path.GET_PHENOTYPE_DETAIL_VERSION if version_id else Path.GET_PHENOTYPE_DETAIL
+    url = PATH.GET_PHENOTYPE_DETAIL_VERSION if version_id else PATH.GET_PHENOTYPE_DETAIL
     url = self._build_url(url, id=id, version_id=version_id)
 
     response = self._get(url)
@@ -111,7 +111,7 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
 
       >>> # Get codelist of phenotype, PH1
       >>> client.phenotypes.get_codelist('PH1')
@@ -119,13 +119,13 @@ class Phenotypes(Endpoint):
       >>> # Get codelist of version 2 of phenotype, PH1
       >>> client.phenotypes.get_codelist('PH1', version_id=2)
     '''
-    url = Path.GET_PHENOTYPE_CODELIST_VERSION if version_id else Path.GET_PHENOTYPE_CODELIST
+    url = PATH.GET_PHENOTYPE_CODELIST_VERSION if version_id else PATH.GET_PHENOTYPE_CODELIST
     url = self._build_url(url, id=id, version_id=version_id)
 
     response = self._get(url)
     return response  
 
-  def save_to_file(self, path: str, id: str, version_id: int | None = None) -> None:
+  def save_definition_file(self, path: str, id: str, version_id: int | None = None) -> None:
     '''
     Saves the YAML definition of the queried phenotype to file
 
@@ -136,13 +136,13 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
 
       >>> # Get codelist of phenotype, PH1
-      >>> client.phenotypes.save_to_file('./path/to/file.yaml', 'PH1')
+      >>> client.phenotypes.save_definition_file('./path/to/file.yaml', 'PH1')
 
       >>> # Get codelist of version 2 of phenotype, PH1
-      >>> client.phenotypes.save_to_file('./path/to/file.yaml', 'PH1', version_id=2)
+      >>> client.phenotypes.save_definition_file('./path/to/file.yaml', 'PH1', version_id=2)
     '''
     phenotype_data = self.get_detail(id=id, version_id=version_id)
     phenotype_data = self.__format_for_download(phenotype_data)
@@ -162,17 +162,17 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
       >>> client.phenotypes.create('./path/to/file.yaml')
     '''
     data = utils.read_from_yaml_file(path)
     data = self.__format_for_upload(data)
 
-    url = self._build_url(Path.CREATE_PHENOTYPE)
+    url = self._build_url(PATH.CREATE_PHENOTYPE)
     response = self._post(url, data=data)
     response = response.get('entity')
 
-    self.save_to_file(path, response.get('id'), version_id=response.get('version_id'))
+    self.save_definition_file(path, response.get('id'), version_id=response.get('version_id'))
 
     return response
   
@@ -188,17 +188,17 @@ class Phenotypes(Endpoint):
     
     Examples:
       >>> from pyconceptlibraryclient import Client
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
       >>> client.phenotypes.create('./path/to/file.yaml')
     '''
     data = utils.read_from_yaml_file(path)
     data = self.__format_for_upload(data, is_update=True)
 
-    url = self._build_url(Path.UPDATE_PHENOTYPE)
+    url = self._build_url(PATH.UPDATE_PHENOTYPE)
     response = self._put(url, data=data)
     response = response.get('entity')
 
-    self.save_to_file(path, response.get('id'), version_id=response.get('version_id'))
+    self.save_definition_file(path, response.get('id'), version_id=response.get('version_id'))
 
     return response
 

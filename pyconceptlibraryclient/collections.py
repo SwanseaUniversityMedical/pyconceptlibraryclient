@@ -1,5 +1,5 @@
 from pyconceptlibraryclient.endpoint import Endpoint
-from pyconceptlibraryclient.constants import Path
+from pyconceptlibraryclient.constants import PATH
 
 class Collections(Endpoint):
   '''
@@ -18,10 +18,10 @@ class Collections(Endpoint):
     
     Examples:
       >>> import pyconceptlibraryclient
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
       >>> client.collections.get()
     '''
-    url = self._build_url(Path.GET_ALL_COLLECTIONS)
+    url = self._build_url(PATH.GET_ALL_COLLECTIONS)
 
     response = self._get(url)
     return response
@@ -38,10 +38,10 @@ class Collections(Endpoint):
     
     Examples:
         >>> import pyconceptlibraryclient
-        >>> client = Client(is_public=False)
+        >>> client = Client(public=False)
         >>> client.collections.get_detail(1)
     '''
-    url = self._build_url(Path.GET_COLLECTION_BY_ID, id=id)
+    url = self._build_url(PATH.GET_COLLECTION_BY_ID, id=id)
 
     response = self._get(url)
     return response

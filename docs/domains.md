@@ -1,3 +1,3 @@
 # Domains
 
-::: pyconceptlibraryclient.constants.Domains
+::: pyconceptlibraryclient.constants.DOMAINS

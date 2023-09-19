@@ -5,7 +5,7 @@ API_PATH = 'api/v%s/' % API_VERSION
 
 SUCCESS_STATUS_CODES = [200, 201]
 
-class Path(str, Enum):
+class PATH(str, Enum):
   '''
   Library endpoints
   '''
@@ -46,7 +46,7 @@ class Path(str, Enum):
   GET_ALL_DATASOURCES = 'data-sources'
   GET_DATASOURCE_BY_ID = 'data-sources/{id}/detail'
 
-class Domains(str, Enum):
+class DOMAINS(str, Enum):
   '''
   List of common ConceptLibrary domains:
    - SAIL: https://conceptlibrary.saildatabank.com/
@@ -63,4 +63,4 @@ class Domains(str, Enum):
   DEMO = 'https://conceptlibrary.demo-dev.saildatabank.com/',
   LOCAL = 'http://127.0.0.1:8000/'
 
-DEFAULT_URL = Domains.SAIL
+DEFAULT_URL = DOMAINS.SAIL

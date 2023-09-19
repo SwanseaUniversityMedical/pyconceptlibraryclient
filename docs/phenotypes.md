@@ -7,6 +7,6 @@
             - get_versions
             - get_detail
             - get_codelist
-            - save_to_file
+            - save_definition_file
             - create
             - update

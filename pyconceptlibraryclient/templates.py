@@ -1,5 +1,5 @@
 from pyconceptlibraryclient.endpoint import Endpoint
-from pyconceptlibraryclient.constants import Path
+from pyconceptlibraryclient.constants import PATH
 
 class Templates(Endpoint):
   '''
@@ -18,10 +18,10 @@ class Templates(Endpoint):
     
     Examples:
       >>> import pyconceptlibraryclient
-      >>> client = Client(is_public=False)
+      >>> client = Client(public=False)
       >>> client.templates.get()
     '''
-    url = self._build_url(Path.GET_ALL_TEMPLATES)
+    url = self._build_url(PATH.GET_ALL_TEMPLATES)
 
     response = self._get(url)
     return response
@@ -38,10 +38,10 @@ class Templates(Endpoint):
     
     Examples:
         >>> import pyconceptlibraryclient
-        >>> client = Client(is_public=False)
+        >>> client = Client(public=False)
         >>> client.templates.get_versions(1)
     '''
-    url = self._build_url(Path.GET_TEMPLATE_VERSIONS, id=id)
+    url = self._build_url(PATH.GET_TEMPLATE_VERSIONS, id=id)
 
     response = self._get(url)
     return response
@@ -60,7 +60,7 @@ class Templates(Endpoint):
     
     Examples:
         >>> import pyconceptlibraryclient
-        >>> client = Client(is_public=False)
+        >>> client = Client(public=False)
 
         >>> # Get detail of a template
         >>> client.templates.get_detail(1)
@@ -68,7 +68,7 @@ class Templates(Endpoint):
         >>> # Get detail of a template with specific version
         >>> client.templates.get_detail(1, version_id=1)
     '''
-    url = Path.GET_TEMPLATE_DETAIL_VERSION if version_id else Path.GET_TEMPLATE_DETAIL
+    url = PATH.GET_TEMPLATE_DETAIL_VERSION if version_id else PATH.GET_TEMPLATE_DETAIL
     url = self._build_url(url, id=id, version_id=version_id)
 
     response = self._get(url)
