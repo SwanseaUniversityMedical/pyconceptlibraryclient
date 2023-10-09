@@ -251,7 +251,8 @@ class Phenotypes(Endpoint):
           'details': {
             'name': concept['name'],
             'coding_system': concept['coding_system'],
-            'internal_type': concept['type']
+            'internal_type': concept['type'],
+            'code_attribute_header': []
           },
           'components': []
         }
@@ -265,7 +266,9 @@ class Phenotypes(Endpoint):
         else:
           new_concept['is_new'] = True
         
-        new_concept['components'].append(self.__build_concept_components(concept, new_concept))
+        new_component, attribute_headers = self.__build_concept_components(concept, new_concept)
+        new_concept['components'].append(new_component)
+        new_concept['details']['code_attribute_header'] = attribute_headers
 
         result.append(new_concept)
         continue
@@ -277,9 +280,20 @@ class Phenotypes(Endpoint):
     
     '''
     codelist = pd.read_csv(concept['filepath'])
-    code_column, description_column = concept['code_column'], concept['description_column']
-    has_description = description_column in codelist.columns
-    
+    column_list = codelist.columns
+
+    code_column = concept.get('code_column')
+    if not code_column or code_column not in column_list:
+      print(f'{concept["name"]} missing \'code_column\', returns no codes')
+      return {}, []
+
+    description_column = concept.get('description_column')
+    has_description = description_column and description_column in column_list
+
+    attribute_headers = [
+      header for header in column_list if header not in [code_column, description_column]
+    ]
+
     new_component = {
       'is_new': True,
       'name': 'CODES - %s' % new_concept['details']['name'],
@@ -290,10 +304,11 @@ class Phenotypes(Endpoint):
     for _, row in codelist.iterrows():
       new_component['codes'].append({
         'code': row[code_column],
-        'description': '' if not has_description else row[description_column]
+        'description': '' if not has_description else row[description_column],
+        'attributes': list(row[attribute_headers].values)
       })
 
-    return new_component
+    return new_component, attribute_headers
 
   def __format_for_download(self, data: dict | None) -> list | None:
     '''
@@ -310,7 +325,7 @@ class Phenotypes(Endpoint):
       if not isinstance(value, list) and not isinstance(value, dict):
         result[key] = value
         continue
-    
+
       if key == 'concept_information':
         result[key] = []
         for concept in value:
