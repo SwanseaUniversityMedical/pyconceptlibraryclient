@@ -339,6 +339,10 @@ class Phenotypes(Endpoint):
           result[key].append(new_concept)
         continue
 
+      if key == 'group':
+        result[key] = value['id']
+        continue
+
       if isinstance(value, list):
         fields = {k: [v[k] for v in value] for k in value[0]}
         field_keys = fields.keys()
