@@ -210,7 +210,7 @@ class Phenotypes(Endpoint):
       'data': data,
       'template': {
         'id': data['template']['id'],
-        'version': data['template']['id']
+        'version': data['template']['version_id']
       }
     }
     if is_update:
