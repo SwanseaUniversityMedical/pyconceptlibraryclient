@@ -7,10 +7,16 @@ The Concept Library is a system for storing, managing, sharing, and documenting 
 https://swanseauniversitymedical.github.io/pyconceptlibraryclient/
 
 ## Installation
-This package can be easily installed using pip. In your terminal, run the following command:
+This package can be installed using pip. In your terminal, run the following command:
 ```
 pip install git+https://github.com/SwanseaUniversityMedical/pyconceptlibraryclient.git@v1.0.0
 ```
+
+### Inside the SAIL gateway / offline install
+
+SAIL users or users requiring offline installation of the package can:
+1. Download the [latest release](https://github.com/SwanseaUniversityMedical/pyconceptlibraryclient/releases)
+2. Install the package using pip, e.g. `pip install /path/to/file/pyconceptlibraryclient-1.0.1.tar.gz`
 
 # Using the package
 The package provides a function to connect to the Concept Library API and multiple functions to send requests to the API's endpoints.
@@ -56,7 +62,7 @@ client = Client(
 ## Gateway (conceptlibrary.serp.ac.uk/)
 client = Client(
   public=True,
-  url=DOMAINS.DEMO
+  url=DOMAINS.GATEWAY
 )
 
 ## Demo site (conceptlibrary.demo-dev.saildatabank.com/)
