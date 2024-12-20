@@ -9,25 +9,32 @@ class Concepts(Endpoint):
   def __init__(self, *args, **kwargs) -> None:
     super(Concepts, self).__init__(*args, **kwargs)
 
-  def get(self, **kwargs) -> list | None:
+  def get(self, **kwargs) -> dict | list | None:
     '''
     Queries concepts/, with optional query parameters
+
+    NOTE:
+      - See the following URL for more information on query parameters: https://conceptlibrary.saildatabank.com/api/v1/#operations-tag-concepts
 
     Keyword Args:
       search (string): Keyword search
       collections (list): IDs of collections
       tags (list): IDs of tags
       datasources (list): IDs of datasources
-    
-    Returns:
-      Response (list): List of concepts matching query parameters
+
+    Response (dict|list):
+      - If paginated: a dict of concepts matching query parameters
+      - If unpaginated: a list of concepts matching query parameters
     
     Examples:
       >>> from pyconceptlibraryclient import Client
       >>> client = Client(public=False)
 
-      >>> # Get all concepts
+      >>> # Get all concepts (defaults to paginated)
       >>> client.concepts.get()
+
+      >>> # [NOTE: not recommended!] Get unpaginated list of concepts
+      >>> client.concepts.get(no_pagination=True)
 
       >>> # Search concepts
       >>> client.concepts.get(search='asthma', collections=19)
@@ -46,7 +53,7 @@ class Concepts(Endpoint):
     
     Returns:
       Response (list): Version list of queried concept
-    
+
     Examples:
       >>> from pyconceptlibraryclient import Client
       >>> client = Client(public=False)

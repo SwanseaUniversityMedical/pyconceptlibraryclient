@@ -23,6 +23,10 @@ concept_information:
   type: existing_concept
   concept_id: 715
   concept_history_id: 2569
+ontology:
+- 50323
+- 'icd9:569.82'
+- 'snomed:420764009'
 world_access: 1
 group_access: 1
 template:

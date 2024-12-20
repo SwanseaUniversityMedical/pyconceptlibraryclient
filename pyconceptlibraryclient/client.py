@@ -7,6 +7,7 @@ from pyconceptlibraryclient.concepts import Concepts
 from pyconceptlibraryclient.collections import Collections
 from pyconceptlibraryclient.tags import Tags
 from pyconceptlibraryclient.datasources import Datasources
+from pyconceptlibraryclient.ontology import Ontology
 import pyconceptlibraryclient.constants as constants
 
 class Client():
@@ -125,3 +126,12 @@ class Client():
     if not getattr(self, '__datasources', None):
       setattr(self, '__datasources', Datasources(self.url, self.__auth))
     return getattr(self, '__datasources')
+
+  @property
+  def ontology(self) -> Ontology:
+    '''
+      Entrypoint for ontology through the client instance
+    '''
+    if not getattr(self, '__ontology', None):
+      setattr(self, '__ontology', Ontology(self.url, self.__auth))
+    return getattr(self, '__ontology')

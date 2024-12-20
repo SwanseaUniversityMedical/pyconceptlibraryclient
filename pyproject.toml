@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyconceptlibraryclient"
-version = "1.0.1"
+version = "1.0.2"
 description = "Python API Client for Concept Library/HDR UK Phenotype Library"
 authors = [
     "Sambhav Dave <sambhav.dave@swansea.ac.uk>",
@@ -25,7 +25,7 @@ autohooks-plugin-black = "^23.4.0"
 mkdocs = "^1.4.3"
 mkdocs-material = "^9.1.18"
 mkdocstrings-python = "^1.2.0"
-mkdocstrings = "^0.22.0"
+mkdocstrings = {extras = ["python"], version = "^0.27.0"}
 
 [build-system]
 requires = ["poetry-core"]

@@ -33,7 +33,7 @@ client = Client(public=True)
 client = Client(public=False)
 
 # Authenticated API (user providing credentials)
-client = Client(username='my-username', password='password)
+client = Client(username='my-username', password='password')
 ```
 
 The `url` parameter can be used to specify a different version of the ConceptLibrary API
@@ -100,10 +100,29 @@ template_list = client.templates.get_detail(1, version_id=1)
 
 #### Querying
 ``` python
-# Search phenotypes
+# Search phenotypes (defaults to paginated)
 search_results = client.phenotypes.get(
   search='asthma',
   collections=19
+)
+
+page = search_results.get('page')
+page_size = search_results.get('page_size')
+total_pages = search_results.get('total_pages')
+search_data = search_results.get('data')
+
+# Iterate over search result pages
+next_page = client.phenotypes.get(
+  page=page + 1,
+  search='asthma',
+  collections=19
+)
+
+# [NOTE: not recommended!] Search unpaginated list of phenotypes
+search_results = client.phenotypes.get(
+  search='asthma',
+  collections=19,
+  no_pagination=True
 )
 
 # Search phenotypes
@@ -142,10 +161,29 @@ client.phenotypes.update('./path/to/file.yaml')
 
 ### Concepts
 ``` python
-# Search concepts
+# Search concepts (defaults to paginated)
 search_results = client.concepts.get(
   search='asthma',
   collections=19
+)
+
+page = search_results.get('page')
+page_size = search_results.get('page_size')
+total_pages = search_results.get('total_pages')
+search_data = search_results.get('data')
+
+# Iterate over search result pages
+next_page = client.concepts.get(
+  page=page + 1,
+  search='asthma',
+  collections=19
+)
+
+# [NOTE: not recommended!] Search unpaginated list of concepts
+search_results = client.concepts.get(
+  search='asthma',
+  collections=19,
+  no_pagination=True
 )
 
 # Search concepts
@@ -189,4 +227,48 @@ datasource_list = client.datasources.get()
 
 # Get the datasource detail
 datasource_detail = client.datasources.get_detail(1)
+```
+
+### Ontology
+``` python
+# Get paginated list of ontological term(s) (nodes; paginated by default)
+search_results = client.ontology.get()
+
+page = search_results.get('page')
+page_size = search_results.get('page_size')
+total_pages = search_results.get('total_pages')
+search_data = search_results.get('data')
+
+# Iterate over search result pages
+next_page = client.ontology.get(
+  page=page + 1,
+  search='asthma',
+  collections=19
+)
+
+# [NOTE: not recommended!] Get unpaginated list of ontological term(s)
+search_results = client.ontology.get(no_pagination=TRUE)
+
+# Search ontological term(s) (paginated by default, apply `no_pagination=T` if required)
+# [!] See the following for more information on parameters:
+#     https://conceptlibrary.saildatabank.com/api/v1/#operations-tag-ontology
+#
+search_results = client.ontology.get(
+  # Searches across names, descriptions & synonyms
+  search='dementia',
+
+  # Search by snomed codes (or ICD9/10, OPSC4, ReadCode2/3 etc)
+  #  - Note: this will fuzzy match across all code mappings;
+  #          apply the `exact_codes=T` parameter if you want exact matches
+  codes='281004'
+)
+
+# Get a specific ontology node by ID
+ontology_node = client.ontology.get_detail(1)
+
+# Get all ontology groups available
+ontology_groups = client.ontology.get_groups()
+
+# Get the ontology group's detail
+clin_speciality_list = client.ontology.get_group_detail(1)
 ```
