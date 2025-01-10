@@ -21,25 +21,32 @@ class Phenotypes(Endpoint):
   def __init__(self, *args, **kwargs) -> None:
     super(Phenotypes, self).__init__(*args, **kwargs)
 
-  def get(self, **kwargs) -> list | None:
+  def get(self, **kwargs) -> list | dict | None:
     '''
     Queries phenotypes/, with optional query parameters
+
+    NOTE:
+      - See the following URL for more information on query parameters: https://conceptlibrary.saildatabank.com/api/v1/#operations-tag-phenotypes
 
     Keyword Args:
       search (string): Keyword search
       collections (list): IDs of collections
       tags (list): IDs of tags
       datasources (list): IDs of datasources
-    
-    Returns:
-      Response (list): List of phenotypes matching query parameters
+
+    Response (dict|list):
+      - If paginated: a dict of phenotypes matching query parameters
+      - If unpaginated: a list of phenotypes matching query parameters
     
     Examples:
       >>> from pyconceptlibraryclient import Client
       >>> client = Client(public=False)
 
-      >>> # Get all phenotypes
+      >>> # Get all phenotypes (defaults to paginated)
       >>> client.phenotypes.get()
+
+      >>> # [NOTE: not recommended!] Get unpaginated list of phenotypes
+      >>> client.phenotypes.get(no_pagination=True)
 
       >>> # Search phenotypes
       >>> client.phenotypes.get(search='asthma', collections=19)
@@ -314,6 +321,7 @@ class Phenotypes(Endpoint):
     '''
     
     '''
+    print(data)
     result = {}
     for key, value in data[0].items():
       if not value:

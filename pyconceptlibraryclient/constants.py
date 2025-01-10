@@ -46,6 +46,12 @@ class PATH(str, Enum):
   GET_ALL_DATASOURCES = 'data-sources'
   GET_DATASOURCE_BY_ID = 'data-sources/{id}/detail'
 
+  # Ontology
+  GET_ONTOLOGY_GROUPS = 'ontology/'
+  GET_ONTOLOGY_TYPE   = 'ontology/type/{id}/'
+  GET_ONTOLOGY_SEARCH = 'ontology/node/'
+  GET_ONTOLOGY_DETAIL = 'ontology/node/{id}/'
+
 class DOMAINS(str, Enum):
   '''
   List of common ConceptLibrary domains:

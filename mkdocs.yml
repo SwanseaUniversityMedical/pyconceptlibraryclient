@@ -57,6 +57,7 @@ nav:
   - "Collections": collections.md
   - "Tags": tags.md
   - "DataSources": datasources.md
+  - "Ontology": ontology.md
 
 markdown_extensions:
   - pymdownx.highlight:

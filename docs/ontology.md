@@ -1,0 +1,3 @@
+# Ontology
+
+::: pyconceptlibraryclient.ontology.Ontology
