@@ -39,27 +39,20 @@ def try_parse_doi(publications: list) -> list:
     publications (list): List of publications from entity definition file
 
   Returns:
-      List of dicts:
-        - 'details': Original publication details.
-        - 'doi': Parsed DOI or None.
-        - 'primary': True if marked as [primary] in text ignores case and whitespace, otherwise False.
+    List of dicts, 'detail' key contains original publication details and 'doi' containing
+    parsed DOI or None  
   '''
   pattern = re.compile(r'\b(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?![\"&\'<>])\S)+)\b')
-  primary_pattern = re.compile(r'\[\s*primary\s*\]', re.IGNORECASE)
 
   output = [ ]
   for publication in publications:
     if publication is None or len(str(publication).strip()) < 1:
       continue
 
-    is_primary = bool(primary_pattern.search(publication))  # Check if marker exists
-    publication_cleaned = primary_pattern.sub("", publication).strip()  # Remove marker from text
     doi = pattern.findall(publication)
-
     output.append({
-      'details': publication_cleaned,
-      'doi': doi[0] if len(doi) > 0 else None,
-      'primary': is_primary
+      'details': publication,
+      'doi': doi[0] if len(doi) > 0 else None
     })
   
   return output
