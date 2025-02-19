@@ -230,9 +230,6 @@ class Phenotypes(Endpoint):
         result['data']['concept_information']
       )
 
-    if 'publications' in result['data'].keys():
-      result['data']['publications'] = utils.try_parse_doi(result['data']['publications'])
-
     result['data'] = {k: v for k, v in result['data'].items() if k not in PHENOTYPE_IGNORED_WRITE_FIELDS}
 
     return result
@@ -321,7 +318,6 @@ class Phenotypes(Endpoint):
     '''
     
     '''
-    print(data)
     result = {}
     for key, value in data[0].items():
       if not value:
@@ -352,8 +348,8 @@ class Phenotypes(Endpoint):
         continue
 
       if isinstance(value, list):
-        fields = {k: [v[k] for v in value] for k in value[0]}
-        field_keys = fields.keys()
+        field_keys = set([k for v in value for k in v])
+        fields = { k: [v.get(k) for v in value] for k in field_keys }
 
         if 'value' in field_keys:
           new_value = fields['value']
@@ -363,9 +359,7 @@ class Phenotypes(Endpoint):
           result[key] = new_value
           continue
 
-        if 'doi' in field_keys:
-          result[key] = fields['details']
-          continue
+        result[key] = value
 
       if isinstance(value, dict):
         field_keys = value.keys()

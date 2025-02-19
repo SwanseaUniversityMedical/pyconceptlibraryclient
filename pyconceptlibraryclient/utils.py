@@ -56,3 +56,4 @@ def try_parse_doi(publications: list) -> list:
     })
   
   return output
+
